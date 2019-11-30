@@ -1,0 +1,2309 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Tribes Report</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:700,400,400italic,700italic,100" rel="stylesheet">
+    <style type="text/css">
+        html {
+            box-sizing: border-box;
+            font-family: Roboto, sans-serif;
+        }
+
+        *, *:before, *:after {
+            box-sizing: inherit;
+        }
+        .axis_label{
+            text-align:center;
+        }
+
+        .chartist-tooltip {
+            position: absolute;
+            display: inline-block;
+            opacity: 0;
+            min-width: 5em;
+            padding: .5em;
+            background: #3b5998;
+            color: #FEFEFE;
+            font-family: Oxygen,Helvetica,Arial,sans-serif;
+            font-weight: 700;
+            text-align: center;
+            pointer-events: none;
+            z-index: 1;
+            -webkit-transition: opacity .2s linear;
+            -moz-transition: opacity .2s linear;
+            -o-transition: opacity .2s linear;
+            transition: opacity .2s linear; }
+        .chartist-tooltip:before {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            margin-left: -15px;
+            border: 15px solid transparent;
+            border-top-color: #3b5998; }
+        .chartist-tooltip.tooltip-show {
+            opacity: 1; }
+
+        .ct-area, .ct-line {
+            pointer-events: none; }
+
+        .top-section {
+            margin-left:60px;
+        }
+
+        .card-image-large{
+            width:250px
+        }
+
+        .winner-header {
+            font-weight:bold;
+            font-size:1.1em
+        }
+
+        .card-set-details-name{
+            font-weight:bold;
+        }
+
+        .report-generation-description {
+            color:#606060;
+            font-size:0.8em;
+            position:relative;
+            top:-15px;
+        }
+
+        .intro-section {
+            width: 1200px;
+        }
+
+    </style>
+</head>
+<body>
+<script src="https://cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
+<script src="https://momentjs.com/downloads/moment.js"></script>
+
+<link href="https://cdn.jsdelivr.net/chartist.js/latest/chartist.min.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript">
+    /* chartist-plugin-tooltip 0.0.18
+* Copyright © 2017 Markus Padourek
+* Free to use under the WTFPL license.
+* http://www.wtfpl.net/
+*/
+
+    !function(a,b){"function"==typeof define&&define.amd?define(["chartist"],function(c){return a.returnExportsGlobal=b(c)}):"object"==typeof exports?module.exports=b(require("chartist")):a["Chartist.plugins.tooltip"]=b(Chartist)}(this,function(a){return function(a,b,c){"use strict";function d(a){f(a,"tooltip-show")||(a.className=a.className+" tooltip-show")}function e(a){var b=new RegExp("tooltip-show\\s*","gi");a.className=a.className.replace(b,"").trim()}function f(a,b){return(" "+a.getAttribute("class")+" ").indexOf(" "+b+" ")>-1}function g(a,b){do{a=a.nextSibling}while(a&&!f(a,b));return a}function h(a){return a.innerText||a.textContent}var i={currency:void 0,currencyFormatCallback:void 0,tooltipOffset:{x:0,y:-20},anchorToPoint:!1,appendToBody:!1,class:void 0,pointClass:"ct-point"};c.plugins=c.plugins||{},c.plugins.tooltip=function(j){return j=c.extend({},i,j),function(i){function k(a,b,c){n.addEventListener(a,function(a){b&&!f(a.target,b)||c(a)})}function l(b){p=p||o.offsetHeight,q=q||o.offsetWidth;var c,d,e=-q/2+j.tooltipOffset.x,f=-p+j.tooltipOffset.y;if(j.appendToBody)o.style.top=b.pageY+f+"px",o.style.left=b.pageX+e+"px";else{var g=n.getBoundingClientRect(),h=b.pageX-g.left-a.pageXOffset,i=b.pageY-g.top-a.pageYOffset;!0===j.anchorToPoint&&b.target.x2&&b.target.y2&&(c=parseInt(b.target.x2.baseVal.value),d=parseInt(b.target.y2.baseVal.value)),o.style.top=(d||i)+f+"px",o.style.left=(c||h)+e+"px"}}var m=j.pointClass;i.constructor.name==c.Bar.prototype.constructor.name?m="ct-bar":i.constructor.name==c.Pie.prototype.constructor.name&&(m=i.options.donut?"ct-slice-donut":"ct-slice-pie");var n=i.container,o=n.querySelector(".chartist-tooltip");o||(o=b.createElement("div"),o.className=j.class?"chartist-tooltip "+j.class:"chartist-tooltip",j.appendToBody?b.body.appendChild(o):n.appendChild(o));var p=o.offsetHeight,q=o.offsetWidth;e(o),k("mouseover",m,function(a){var e=a.target,f="",k=i instanceof c.Pie?e:e.parentNode,m=k?e.parentNode.getAttribute("ct:meta")||e.parentNode.getAttribute("ct:series-name"):"",n=e.getAttribute("ct:meta")||m||"",r=!!n,s=e.getAttribute("ct:value");if(j.transformTooltipTextFnc&&"function"==typeof j.transformTooltipTextFnc&&(s=j.transformTooltipTextFnc(s)),j.tooltipFnc&&"function"==typeof j.tooltipFnc)f=j.tooltipFnc(n,s);else{if(j.metaIsHTML){var t=b.createElement("textarea");t.innerHTML=n,n=t.value}if(n='<span class="chartist-tooltip-meta">'+n+"</span>",r)f+=n+"<br>";else if(i instanceof c.Pie){var u=g(e,"ct-label");u&&(f+=h(u)+"<br>")}s&&(j.currency&&(s=void 0!=j.currencyFormatCallback?j.currencyFormatCallback(s,j):j.currency+s.replace(/(\d)(?=(\d{3})+(?:\.\d+)?$)/g,"$1,")),s='<span class="chartist-tooltip-value">'+s+"</span>",f+=s)}f&&(o.innerHTML=f,l(a),d(o),p=o.offsetHeight,q=o.offsetWidth)}),k("mouseout",m,function(){e(o)}),k("mousemove",null,function(a){!1===j.anchorToPoint&&l(a)})}}}(window,document,a),a.plugins.tooltip});
+    //# sourceMappingURL=chartist-plugin-tooltip.min.js.map
+
+    !function(a,b){"function"==typeof define&&define.amd?define(["chartist"],function(c){return a.returnExportsGlobal=b(c)}):"object"==typeof exports?module.exports=b(require("chartist")):a["Chartist.plugins.ctAxisTitle"]=b(Chartist)}(this,function(a){return function(a,b,c){"use strict";var d={axisTitle:"",axisClass:"ct-axis-title",offset:{x:0,y:0},textAnchor:"middle",flipTitle:!1},e={axisX:d,axisY:d},f=function(a){return a instanceof Function?a():a},g=function(a){return a instanceof Function?a():a};c.plugins=c.plugins||{},c.plugins.ctAxisTitle=function(a){return a=c.extend({},e,a),function(b){b.on("created",function(b){if(!a.axisX.axisTitle&&!a.axisY.axisTitle)throw new Error("ctAxisTitle plugin - You must provide at least one axis title");if(!b.axisX&&!b.axisY)throw new Error("ctAxisTitle plugin can only be used on charts that have at least one axis");var d,e,h,i=c.normalizePadding(b.options.chartPadding);if(a.axisX.axisTitle&&b.axisX&&(d=b.axisX.axisLength/2+b.options.axisY.offset+i.left,e=i.top,"end"===b.options.axisY.position&&(d-=b.options.axisY.offset),"end"===b.options.axisX.position&&(e+=b.axisY.axisLength),h=new c.Svg("text"),h.addClass(g(a.axisX.axisClass)),h.text(f(a.axisX.axisTitle)),h.attr({x:d+a.axisX.offset.x,y:e+a.axisX.offset.y,"text-anchor":a.axisX.textAnchor}),b.svg.append(h,!0)),a.axisY.axisTitle&&b.axisY){d=0,e=b.axisY.axisLength/2+i.top,"start"===b.options.axisX.position&&(e+=b.options.axisX.offset),"end"===b.options.axisY.position&&(d=b.axisX.axisLength);var j="rotate("+(a.axisY.flipTitle?-90:90)+", "+d+", "+e+")";h=new c.Svg("text"),h.addClass(g(a.axisY.axisClass)),h.text(f(a.axisY.axisTitle)),h.attr({x:d+a.axisY.offset.x,y:e+a.axisY.offset.y,transform:j,"text-anchor":a.axisY.textAnchor}),b.svg.append(h,!0)}})}}}(window,document,a),a.plugins.ctAxisTitle});
+</script>
+
+<h2>Tribal Report</h2>
+<div class="report-generation-description">Generated On - Nov 30 2019 - 50433 Cards in 561 Sets</div>
+<div class="intro-section">
+    <p>Hello! This is a generated snapshot report for Tribes in the popular collectible trading card game - Magic: The Gathering. The analysis is done by looking for tribes within each expansion and core set. A tribe of cards is a particular creature type, cards that can produce creature tokens up that type and a group of cards that reference that type (generally but not explicitly supporting that type).</p
+    <p>A tribe is <strong>supported</strong> if it meets three criteria:</p>
+    <ol>
+        <li>
+            <strong>Creature Count (10)</strong> - The tribe must contain at least 10 creatures to be considered supported. For the purposes of this analysis and for simplicity, cards that generate counters are considered creatures regardless of their underlying type
+        </li>
+        <li>
+            <strong>Common Creature Count (3)</strong> - Of the creatures in the tribe, atleast 3 must be at common. This is a signpost that the type is supported within a limited environment.
+        </li>
+        <li>
+            <strong>Reference Count (5)</strong> - There must be atleast 5 cards within the set that reference this type within the card's Oracle Text.
+        </li>
+    </ol>
+        <p>These criteria are not precise, and the values assigned to them have been tweaked empirically in a way that the tribes it identifies are roughly in line with other resources that identify tribes within these sets</p>
+        <p>We assigned a set a <strong>Tribal Score</strong> based off of the percentage of cards within that set that fall within a supported tribe - or act like a wildcard (ex: Shapeshifters). That score is normalized against the peak (which is generally regarded to be the Lowryn Block).
+        <p>Sections:</p>
+            <ul>
+                <li><a href="#top-20-tribal-sets">Top 20 Tribal Sets</a> - How "tribal" are different sets?</li>
+                <li><a href="#tribal-trend-section">Tribal Trends</a> - How has the usage of "tribal matters" mechancis faired over time?</li>
+                <li><a href="#largest-tribes">Largest Tribes</a> - Which tribes are the most supported?</li>
+                <li><a href="#frequent-tribes">Recurring Tribes</a> - Which tribes occur most frequently?</li>
+                <li><a href="#snubbed-tribes">Most Snubbed Tribes</a> - Which creature types get printed frequently but do not appear as supported mechanics?</li>
+                <li><a href="#all-sets">All Sets/All Tribes</a> - Raw listing of all detected tribes</li>
+            </ul>
+
+        <p>Links:</p>
+        <ul>
+            <li><a href="#">Reddit Thread</a> - Any questions or feedback on the approach can be tossed in here</li>
+            <li><a href="https://scryfall.com/docs/api">Scryfall API Documentation</a> - The Scryfall APIs and data resources are what power this report under the hood. These are high quality, invaluable and highly recommended</li>
+            <li><a href="https://gionkunz.github.io/chartist-js/"/>Chartist.js<a/> - The two charts generated in these reports leverage the fantastic Chartist APIs to render</li>
+            <li><a href="https://github.com/jmcguirk/mtgtribal-go">Github Source</a> - The source for generating the project can be found here. The implementation of a golang data model for the Scryfall might be interesting, the HTML generation is pretty bad :)</li>
+        </ul>
+</div>
+<div id="top-20-tribal-sets">
+    <h3>Top 20 Tribal Sets</h3>
+    <p>These are the top 20 core and expansion sets based on their calculated tribal score, min-max normalized.</p>
+
+    <div class="ct-chart ct-golden-section" style="width:1200px;height:640px" id="top-sets-chart"></div>
+    <script type="text/javascript">
+
+        var percentify = function(val) {
+            return val + "%";
+        }
+
+        var yearVal = function(val) {
+            val = val.split(",")[0];
+            //return val;
+
+            return new Date(parseInt(val)).getFullYear();
+        }
+
+        top_20_sets_by_tribes = {
+    "labels": [
+        {
+            "label": "Morningtide",
+            "image": "https://img.scryfall.com/sets/mor.svg?1574053200"
+        },
+        {
+            "label": "Lorwyn",
+            "image": "https://img.scryfall.com/sets/lrw.svg?1574053200"
+        },
+        {
+            "label": "Legions",
+            "image": "https://img.scryfall.com/sets/lgn.svg?1574053200"
+        },
+        {
+            "label": "Onslaught",
+            "image": "https://img.scryfall.com/sets/ons.svg?1574053200"
+        },
+        {
+            "label": "Rivals of Ixalan",
+            "image": "https://img.scryfall.com/sets/rix.svg?1574053200"
+        },
+        {
+            "label": "Ixalan",
+            "image": "https://img.scryfall.com/sets/xln.svg?1574053200"
+        },
+        {
+            "label": "Betrayers of Kamigawa",
+            "image": "https://img.scryfall.com/sets/bok.svg?1574053200"
+        },
+        {
+            "label": "Champions of Kamigawa",
+            "image": "https://img.scryfall.com/sets/chk.svg?1574053200"
+        },
+        {
+            "label": "Innistrad",
+            "image": "https://img.scryfall.com/sets/isd.svg?1574053200"
+        },
+        {
+            "label": "Saviors of Kamigawa",
+            "image": "https://img.scryfall.com/sets/sok.svg?1574053200"
+        },
+        {
+            "label": "Avacyn Restored",
+            "image": "https://img.scryfall.com/sets/avr.svg?1574053200"
+        },
+        {
+            "label": "Shadows over Innistrad",
+            "image": "https://img.scryfall.com/sets/soi.svg?1574053200"
+        },
+        {
+            "label": "Amonkhet",
+            "image": "https://img.scryfall.com/sets/akh.svg?1574053200"
+        },
+        {
+            "label": "Dark Ascension",
+            "image": "https://img.scryfall.com/sets/dka.svg?1574053200"
+        },
+        {
+            "label": "Throne of Eldraine",
+            "image": "https://img.scryfall.com/sets/eld.svg?1574053200"
+        },
+        {
+            "label": "Eldritch Moon",
+            "image": "https://img.scryfall.com/sets/emn.svg?1574053200"
+        },
+        {
+            "label": "Hour of Devastation",
+            "image": "https://img.scryfall.com/sets/hou.svg?1574053200"
+        },
+        {
+            "label": "Oath of the Gatewatch",
+            "image": "https://img.scryfall.com/sets/ogw.svg?1574053200"
+        },
+        {
+            "label": "Battle for Zendikar",
+            "image": "https://img.scryfall.com/sets/bfz.svg?1574053200"
+        },
+        {
+            "label": "Core Set 2020",
+            "image": "https://img.scryfall.com/sets/m20.svg?1574053200"
+        }
+    ],
+    "series": [
+        {
+            "value": 100,
+            "meta": "Morningtide"
+        },
+        {
+            "value": 96,
+            "meta": "Lorwyn"
+        },
+        {
+            "value": 94,
+            "meta": "Legions"
+        },
+        {
+            "value": 81,
+            "meta": "Onslaught"
+        },
+        {
+            "value": 80,
+            "meta": "Rivals of Ixalan"
+        },
+        {
+            "value": 73,
+            "meta": "Ixalan"
+        },
+        {
+            "value": 52,
+            "meta": "Betrayers of Kamigawa"
+        },
+        {
+            "value": 50,
+            "meta": "Champions of Kamigawa"
+        },
+        {
+            "value": 49,
+            "meta": "Innistrad"
+        },
+        {
+            "value": 48,
+            "meta": "Saviors of Kamigawa"
+        },
+        {
+            "value": 38,
+            "meta": "Avacyn Restored"
+        },
+        {
+            "value": 34,
+            "meta": "Shadows over Innistrad"
+        },
+        {
+            "value": 31,
+            "meta": "Amonkhet"
+        },
+        {
+            "value": 30,
+            "meta": "Dark Ascension"
+        },
+        {
+            "value": 29,
+            "meta": "Throne of Eldraine"
+        },
+        {
+            "value": 24,
+            "meta": "Eldritch Moon"
+        },
+        {
+            "value": 23,
+            "meta": "Hour of Devastation"
+        },
+        {
+            "value": 23,
+            "meta": "Oath of the Gatewatch"
+        },
+        {
+            "value": 20,
+            "meta": "Battle for Zendikar"
+        },
+        {
+            "value": 15,
+            "meta": "Core Set 2020"
+        }
+    ]
+};
+
+        new Chartist.Bar('#top-sets-chart', top_20_sets_by_tribes, {
+            high: 105,
+            low: 0,
+            chartPadding: {
+                bottom: 30
+            },
+            distributeSeries:true,
+            seriesBarDistance: 10,
+            axisX: {
+                offset: 60
+            },
+            plugins: [
+                Chartist.plugins.tooltip({
+                    pointClass: '.top-set-data-point',
+                    transformTooltipTextFnc : percentify,
+                    anchorToPoint: false
+                })
+            ],
+            axisY: {
+                type: Chartist.FixedScaleAxis,
+                offset: 80,
+                ticks: [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
+                labelInterpolationFnc: function(value) {
+                    return value + '%'
+                }
+            }
+        }).on('draw', function(context) {
+            if(context.type === 'bar') {
+                var color = context.value.y;//Math.random() * 100;//context.value;
+                context.element.attr({
+                    //style: 'stroke-width: 50px'
+
+                    style: 'stroke: hsl(' + color + ', 80%, 50%);stroke-width:40px'
+                });
+            }
+            if (context.type === 'label' &&
+                context.axis.units.pos === 'x') {
+                //debugger;
+
+                var group = new Chartist.Svg('g');
+
+                group.append(
+                    new Chartist.Svg('image', {
+                        'xlink:href': context.text.image,
+                        width: '30px',
+                        height: '30px',
+                        x: context.x - 15 + (context.width/2),
+                        y: context.y + 5
+                    })
+                );
+
+
+                /*var textHtml = ['<p class="axis_label">', context.text.label, '</p>'].join('');
+                group.append(new Chartist.Svg('svg').foreignObject(textHtml, {
+                    width: '110px',
+                    height: '300px',
+                    x: context.x,
+                    y: context.y + 20,
+                    'text-anchor': 'middle',
+                    'alignment-baseline': 'hanging'
+                }));*/
+
+                context.element.replace(group);;
+            }
+        });
+    </script>
+</div>
+
+
+<div id="tribal-trend-section" style="height:600px">
+<h3>Tribal Trend</h3>
+<p>Here's how the tribe score has trended over the last 25 years of expansions and how many unique tribes have been in the game</p>
+
+<div class="ct-chart ct-golden-section" style="width:1200px;height:600px;position:relative;left:80px;" id="tribal-cumulative-chart"></div>
+<div class="ct-chart ct-golden-section" style="width:1200px;height:600px;position:relative;top:-600px" id="tribal-trend-chart"></div>
+<div class="ct-chart ct-golden-section" style="width:1200px;height:600px;position:relative;top:-1220px;" id="tribal-trend-chart-tool-tips"></div>
+<script type="text/javascript">
+
+    historic_trend_json = {
+    "series": [
+        {
+            "releaseTimeStamp": 744508800,
+            "setName": "Limited Edition Alpha",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 749692800,
+            "setName": "Limited Edition Beta",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 754704000,
+            "setName": "Unlimited Edition",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 756086400,
+            "setName": "Arabian Nights",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 762739200,
+            "setName": "Antiquities",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 765158400,
+            "setName": "Foreign Black Border",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 765158400,
+            "setName": "Revised Edition",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 770428800,
+            "setName": "Legends",
+            "score": 9
+        },
+        {
+            "releaseTimeStamp": 772156800,
+            "setName": "Summer Magic / Edgar",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 775699200,
+            "setName": "The Dark",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 783648000,
+            "setName": "Fallen Empires",
+            "score": 12
+        },
+        {
+            "releaseTimeStamp": 796694400,
+            "setName": "Fourth Edition Foreign Black Border",
+            "score": 7
+        },
+        {
+            "releaseTimeStamp": 796694400,
+            "setName": "Fourth Edition",
+            "score": 7
+        },
+        {
+            "releaseTimeStamp": 801964800,
+            "setName": "Ice Age",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 812505600,
+            "setName": "Homelands",
+            "score": 1
+        },
+        {
+            "releaseTimeStamp": 834364800,
+            "setName": "Alliances",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 844732800,
+            "setName": "Mirage",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 854928000,
+            "setName": "Visions",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 859161600,
+            "setName": "Fifth Edition",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 865814400,
+            "setName": "Weatherlight",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 876787200,
+            "setName": "Tempest",
+            "score": 5
+        },
+        {
+            "releaseTimeStamp": 888796800,
+            "setName": "Stronghold",
+            "score": 1
+        },
+        {
+            "releaseTimeStamp": 897868800,
+            "setName": "Exodus",
+            "score": 1
+        },
+        {
+            "releaseTimeStamp": 908150400,
+            "setName": "Urza's Saga",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 919036800,
+            "setName": "Urza's Legacy",
+            "score": 1
+        },
+        {
+            "releaseTimeStamp": 924652800,
+            "setName": "Classic Sixth Edition",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 928713600,
+            "setName": "Urza's Destiny",
+            "score": 1
+        },
+        {
+            "releaseTimeStamp": 938995200,
+            "setName": "Mercadian Masques",
+            "score": 15
+        },
+        {
+            "releaseTimeStamp": 950486400,
+            "setName": "Nemesis",
+            "score": 1
+        },
+        {
+            "releaseTimeStamp": 960163200,
+            "setName": "Prophecy",
+            "score": 1
+        },
+        {
+            "releaseTimeStamp": 970444800,
+            "setName": "Invasion",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 981331200,
+            "setName": "Planeshift",
+            "score": 1
+        },
+        {
+            "releaseTimeStamp": 986947200,
+            "setName": "Seventh Edition",
+            "score": 1
+        },
+        {
+            "releaseTimeStamp": 991612800,
+            "setName": "Apocalypse",
+            "score": 2
+        },
+        {
+            "releaseTimeStamp": 1001894400,
+            "setName": "Odyssey",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 1012780800,
+            "setName": "Torment",
+            "score": 1
+        },
+        {
+            "releaseTimeStamp": 1022457600,
+            "setName": "Judgment",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 1033948800,
+            "setName": "Onslaught",
+            "score": 81
+        },
+        {
+            "releaseTimeStamp": 1044230400,
+            "setName": "Legions",
+            "score": 94
+        },
+        {
+            "releaseTimeStamp": 1053907200,
+            "setName": "Scourge",
+            "score": 5
+        },
+        {
+            "releaseTimeStamp": 1059350400,
+            "setName": "Eighth Edition",
+            "score": 1
+        },
+        {
+            "releaseTimeStamp": 1065052800,
+            "setName": "Mirrodin",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 1076025600,
+            "setName": "Darksteel",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 1086307200,
+            "setName": "Fifth Dawn",
+            "score": 1
+        },
+        {
+            "releaseTimeStamp": 1096588800,
+            "setName": "Champions of Kamigawa",
+            "score": 50
+        },
+        {
+            "releaseTimeStamp": 1107475200,
+            "setName": "Betrayers of Kamigawa",
+            "score": 52
+        },
+        {
+            "releaseTimeStamp": 1117756800,
+            "setName": "Saviors of Kamigawa",
+            "score": 48
+        },
+        {
+            "releaseTimeStamp": 1122595200,
+            "setName": "Ninth Edition",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 1128643200,
+            "setName": "Ravnica: City of Guilds",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 1138924800,
+            "setName": "Guildpact",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 1146787200,
+            "setName": "Dissension",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 1153440000,
+            "setName": "Coldsnap",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 1160092800,
+            "setName": "Time Spiral",
+            "score": 13
+        },
+        {
+            "releaseTimeStamp": 1160092800,
+            "setName": "Time Spiral Timeshifted",
+            "score": 2
+        },
+        {
+            "releaseTimeStamp": 1170374400,
+            "setName": "Planar Chaos",
+            "score": 10
+        },
+        {
+            "releaseTimeStamp": 1178236800,
+            "setName": "Future Sight",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 1184284800,
+            "setName": "Tenth Edition",
+            "score": 1
+        },
+        {
+            "releaseTimeStamp": 1192147200,
+            "setName": "Lorwyn",
+            "score": 96
+        },
+        {
+            "releaseTimeStamp": 1201824000,
+            "setName": "Morningtide",
+            "score": 100
+        },
+        {
+            "releaseTimeStamp": 1209686400,
+            "setName": "Shadowmoor",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 1216944000,
+            "setName": "Eventide",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 1222992000,
+            "setName": "Shards of Alara",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 1233878400,
+            "setName": "Conflux",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 1241049600,
+            "setName": "Alara Reborn",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 1247788800,
+            "setName": "Magic 2010",
+            "score": 1
+        },
+        {
+            "releaseTimeStamp": 1254441600,
+            "setName": "Zendikar",
+            "score": 10
+        },
+        {
+            "releaseTimeStamp": 1265328000,
+            "setName": "Worldwake",
+            "score": 12
+        },
+        {
+            "releaseTimeStamp": 1271980800,
+            "setName": "Rise of the Eldrazi",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 1279238400,
+            "setName": "Magic 2011",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 1285891200,
+            "setName": "Scars of Mirrodin",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 1296777600,
+            "setName": "Mirrodin Besieged",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 1305244800,
+            "setName": "New Phyrexia",
+            "score": 1
+        },
+        {
+            "releaseTimeStamp": 1310688000,
+            "setName": "Magic 2012",
+            "score": 1
+        },
+        {
+            "releaseTimeStamp": 1317340800,
+            "setName": "Innistrad",
+            "score": 49
+        },
+        {
+            "releaseTimeStamp": 1328227200,
+            "setName": "Dark Ascension",
+            "score": 30
+        },
+        {
+            "releaseTimeStamp": 1336089600,
+            "setName": "Avacyn Restored",
+            "score": 38
+        },
+        {
+            "releaseTimeStamp": 1342137600,
+            "setName": "Magic 2013",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 1349395200,
+            "setName": "Return to Ravnica",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 1359676800,
+            "setName": "Gatecrash",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 1367539200,
+            "setName": "Dragon's Maze",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 1374192000,
+            "setName": "Magic 2014",
+            "score": 10
+        },
+        {
+            "releaseTimeStamp": 1380240000,
+            "setName": "Theros",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 1391731200,
+            "setName": "Born of the Gods",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 1398988800,
+            "setName": "Journey into Nyx",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 1405641600,
+            "setName": "Magic 2015",
+            "score": 1
+        },
+        {
+            "releaseTimeStamp": 1411689600,
+            "setName": "Khans of Tarkir",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 1421971200,
+            "setName": "Fate Reforged",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 1427414400,
+            "setName": "Dragons of Tarkir",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 1437091200,
+            "setName": "Magic Origins",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 1443744000,
+            "setName": "Battle for Zendikar",
+            "score": 20
+        },
+        {
+            "releaseTimeStamp": 1453420800,
+            "setName": "Oath of the Gatewatch",
+            "score": 23
+        },
+        {
+            "releaseTimeStamp": 1460073600,
+            "setName": "Shadows over Innistrad",
+            "score": 34
+        },
+        {
+            "releaseTimeStamp": 1469145600,
+            "setName": "Eldritch Moon",
+            "score": 24
+        },
+        {
+            "releaseTimeStamp": 1475193600,
+            "setName": "Kaladesh",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 1484870400,
+            "setName": "Aether Revolt",
+            "score": 1
+        },
+        {
+            "releaseTimeStamp": 1493337600,
+            "setName": "Amonkhet",
+            "score": 31
+        },
+        {
+            "releaseTimeStamp": 1499990400,
+            "setName": "Hour of Devastation",
+            "score": 23
+        },
+        {
+            "releaseTimeStamp": 1506643200,
+            "setName": "Ixalan",
+            "score": 73
+        },
+        {
+            "releaseTimeStamp": 1516320000,
+            "setName": "Rivals of Ixalan",
+            "score": 80
+        },
+        {
+            "releaseTimeStamp": 1524787200,
+            "setName": "Dominaria",
+            "score": 9
+        },
+        {
+            "releaseTimeStamp": 1531440000,
+            "setName": "Core Set 2019",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 1538697600,
+            "setName": "Guilds of Ravnica",
+            "score": 1
+        },
+        {
+            "releaseTimeStamp": 1548374400,
+            "setName": "Ravnica Allegiance",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 1556841600,
+            "setName": "War of the Spark",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 1562889600,
+            "setName": "Core Set 2020",
+            "score": 15
+        },
+        {
+            "releaseTimeStamp": 1570147200,
+            "setName": "Throne of Eldraine",
+            "score": 29
+        }
+    ]
+};
+
+    var _loadTribalData = function(){
+        var data = [];
+        for(var i = 0; i < historic_trend_json.series.length; i++){
+            var dataPoint = {};
+            dataPoint.x = new Date(historic_trend_json.series[i].releaseTimeStamp*1000);
+            dataPoint.y = historic_trend_json.series[i].score;
+            dataPoint.value = {};
+            dataPoint.value.y = dataPoint.y;
+            dataPoint.value.x = dataPoint.x;
+            //dataPoint.value = historic_trend_json.series[i].score;
+            dataPoint.meta = historic_trend_json.series[i].setName;
+            data.push(dataPoint);
+        }
+        return data;
+
+    }
+
+    var _loadTribalTicks = function(){
+        var data = [];
+        var min = 1994;
+        var max = 2019;
+        for(var i = min; i <= max; i++){
+            var dataPoint = new Date(i + "-01-01 00:00:00")
+            data.push(dataPoint);
+        }
+        return data;
+
+    }
+
+    var trend_chart = new Chartist.Line('#tribal-trend-chart', {
+        series: [
+            {
+                data: _loadTribalData()
+            }
+        ]
+    },
+
+        {
+        plugins: [
+            Chartist.plugins.ctAxisTitle({
+                axisX: {
+                    axisTitle: "Release Year",
+                    axisClass: "ct-axis-title",
+                    offset: {
+                        x: 0,
+                        y: 40
+                    },
+                    flipTitle: false
+                },
+                axisY: {
+                    axisTitle: "Tribal Score",
+                    axisClass: "ct-axis-title",
+                    offset: {
+                        x: 0,
+                        y: 40
+                    },
+                    flipTitle: true
+                }
+            }),
+            Chartist.plugins.tooltip({
+                transformTooltipTextFnc : percentify
+            })
+        ],
+        high: 105,
+        axisX: {
+            type: Chartist.FixedScaleAxis,
+            ticks: _loadTribalTicks(),
+            labelInterpolationFnc: function(value) {
+                return moment(value).format('YYYY');
+            }
+        },
+            chartPadding: {
+                bottom: 100
+            },
+        axisY: {
+            type: Chartist.FixedScaleAxis,
+            offset: 80,
+            ticks: [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
+            labelInterpolationFnc: function(value) {
+                return value + '%'
+            }
+        }
+    });
+
+    trend_chart.on('draw', function(data) {
+        // If the draw event was triggered from drawing a point on the line chart
+        if(data.type === 'point') {
+            data.element.attr({
+                //style: 'stroke-width: 50px'
+
+                style: 'stroke: #3b987b;'
+            });
+
+        }
+        if(data.type === 'line') {
+            data.element.attr({
+                //style: 'stroke-width: 50px'
+
+                style: 'stroke: #3b987b;stroke-width:2px;'
+            });
+        }
+    });
+
+</script>
+<script type="text/javascript">
+
+    historic_trend_json = {
+    "series": [
+        {
+            "releaseTimeStamp": 744508800,
+            "setName": "Limited Edition Alpha",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 749692800,
+            "setName": "Limited Edition Beta",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 754704000,
+            "setName": "Unlimited Edition",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 756086400,
+            "setName": "Arabian Nights",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 762739200,
+            "setName": "Antiquities",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 765158400,
+            "setName": "Foreign Black Border",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 765158400,
+            "setName": "Revised Edition",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 770428800,
+            "setName": "Legends",
+            "score": 1
+        },
+        {
+            "releaseTimeStamp": 772156800,
+            "setName": "Summer Magic / Edgar",
+            "score": 1
+        },
+        {
+            "releaseTimeStamp": 775699200,
+            "setName": "The Dark",
+            "score": 1
+        },
+        {
+            "releaseTimeStamp": 783648000,
+            "setName": "Fallen Empires",
+            "score": 2
+        },
+        {
+            "releaseTimeStamp": 796694400,
+            "setName": "Fourth Edition Foreign Black Border",
+            "score": 2
+        },
+        {
+            "releaseTimeStamp": 796694400,
+            "setName": "Fourth Edition",
+            "score": 2
+        },
+        {
+            "releaseTimeStamp": 801964800,
+            "setName": "Ice Age",
+            "score": 2
+        },
+        {
+            "releaseTimeStamp": 812505600,
+            "setName": "Homelands",
+            "score": 2
+        },
+        {
+            "releaseTimeStamp": 834364800,
+            "setName": "Alliances",
+            "score": 2
+        },
+        {
+            "releaseTimeStamp": 844732800,
+            "setName": "Mirage",
+            "score": 2
+        },
+        {
+            "releaseTimeStamp": 854928000,
+            "setName": "Visions",
+            "score": 2
+        },
+        {
+            "releaseTimeStamp": 859161600,
+            "setName": "Fifth Edition",
+            "score": 2
+        },
+        {
+            "releaseTimeStamp": 865814400,
+            "setName": "Weatherlight",
+            "score": 2
+        },
+        {
+            "releaseTimeStamp": 876787200,
+            "setName": "Tempest",
+            "score": 3
+        },
+        {
+            "releaseTimeStamp": 888796800,
+            "setName": "Stronghold",
+            "score": 3
+        },
+        {
+            "releaseTimeStamp": 897868800,
+            "setName": "Exodus",
+            "score": 3
+        },
+        {
+            "releaseTimeStamp": 908150400,
+            "setName": "Urza's Saga",
+            "score": 3
+        },
+        {
+            "releaseTimeStamp": 919036800,
+            "setName": "Urza's Legacy",
+            "score": 3
+        },
+        {
+            "releaseTimeStamp": 924652800,
+            "setName": "Classic Sixth Edition",
+            "score": 3
+        },
+        {
+            "releaseTimeStamp": 928713600,
+            "setName": "Urza's Destiny",
+            "score": 3
+        },
+        {
+            "releaseTimeStamp": 938995200,
+            "setName": "Mercadian Masques",
+            "score": 5
+        },
+        {
+            "releaseTimeStamp": 950486400,
+            "setName": "Nemesis",
+            "score": 5
+        },
+        {
+            "releaseTimeStamp": 960163200,
+            "setName": "Prophecy",
+            "score": 5
+        },
+        {
+            "releaseTimeStamp": 970444800,
+            "setName": "Invasion",
+            "score": 5
+        },
+        {
+            "releaseTimeStamp": 981331200,
+            "setName": "Planeshift",
+            "score": 5
+        },
+        {
+            "releaseTimeStamp": 986947200,
+            "setName": "Seventh Edition",
+            "score": 5
+        },
+        {
+            "releaseTimeStamp": 991612800,
+            "setName": "Apocalypse",
+            "score": 5
+        },
+        {
+            "releaseTimeStamp": 1001894400,
+            "setName": "Odyssey",
+            "score": 5
+        },
+        {
+            "releaseTimeStamp": 1012780800,
+            "setName": "Torment",
+            "score": 5
+        },
+        {
+            "releaseTimeStamp": 1022457600,
+            "setName": "Judgment",
+            "score": 5
+        },
+        {
+            "releaseTimeStamp": 1033948800,
+            "setName": "Onslaught",
+            "score": 12
+        },
+        {
+            "releaseTimeStamp": 1044230400,
+            "setName": "Legions",
+            "score": 13
+        },
+        {
+            "releaseTimeStamp": 1053907200,
+            "setName": "Scourge",
+            "score": 13
+        },
+        {
+            "releaseTimeStamp": 1059350400,
+            "setName": "Eighth Edition",
+            "score": 13
+        },
+        {
+            "releaseTimeStamp": 1065052800,
+            "setName": "Mirrodin",
+            "score": 13
+        },
+        {
+            "releaseTimeStamp": 1076025600,
+            "setName": "Darksteel",
+            "score": 13
+        },
+        {
+            "releaseTimeStamp": 1086307200,
+            "setName": "Fifth Dawn",
+            "score": 13
+        },
+        {
+            "releaseTimeStamp": 1096588800,
+            "setName": "Champions of Kamigawa",
+            "score": 15
+        },
+        {
+            "releaseTimeStamp": 1107475200,
+            "setName": "Betrayers of Kamigawa",
+            "score": 15
+        },
+        {
+            "releaseTimeStamp": 1117756800,
+            "setName": "Saviors of Kamigawa",
+            "score": 15
+        },
+        {
+            "releaseTimeStamp": 1122595200,
+            "setName": "Ninth Edition",
+            "score": 15
+        },
+        {
+            "releaseTimeStamp": 1128643200,
+            "setName": "Ravnica: City of Guilds",
+            "score": 15
+        },
+        {
+            "releaseTimeStamp": 1138924800,
+            "setName": "Guildpact",
+            "score": 15
+        },
+        {
+            "releaseTimeStamp": 1146787200,
+            "setName": "Dissension",
+            "score": 15
+        },
+        {
+            "releaseTimeStamp": 1153440000,
+            "setName": "Coldsnap",
+            "score": 15
+        },
+        {
+            "releaseTimeStamp": 1160092800,
+            "setName": "Time Spiral",
+            "score": 15
+        },
+        {
+            "releaseTimeStamp": 1160092800,
+            "setName": "Time Spiral Timeshifted",
+            "score": 15
+        },
+        {
+            "releaseTimeStamp": 1170374400,
+            "setName": "Planar Chaos",
+            "score": 15
+        },
+        {
+            "releaseTimeStamp": 1178236800,
+            "setName": "Future Sight",
+            "score": 15
+        },
+        {
+            "releaseTimeStamp": 1184284800,
+            "setName": "Tenth Edition",
+            "score": 15
+        },
+        {
+            "releaseTimeStamp": 1192147200,
+            "setName": "Lorwyn",
+            "score": 21
+        },
+        {
+            "releaseTimeStamp": 1201824000,
+            "setName": "Morningtide",
+            "score": 23
+        },
+        {
+            "releaseTimeStamp": 1209686400,
+            "setName": "Shadowmoor",
+            "score": 23
+        },
+        {
+            "releaseTimeStamp": 1216944000,
+            "setName": "Eventide",
+            "score": 23
+        },
+        {
+            "releaseTimeStamp": 1222992000,
+            "setName": "Shards of Alara",
+            "score": 23
+        },
+        {
+            "releaseTimeStamp": 1233878400,
+            "setName": "Conflux",
+            "score": 23
+        },
+        {
+            "releaseTimeStamp": 1241049600,
+            "setName": "Alara Reborn",
+            "score": 23
+        },
+        {
+            "releaseTimeStamp": 1247788800,
+            "setName": "Magic 2010",
+            "score": 23
+        },
+        {
+            "releaseTimeStamp": 1254441600,
+            "setName": "Zendikar",
+            "score": 24
+        },
+        {
+            "releaseTimeStamp": 1265328000,
+            "setName": "Worldwake",
+            "score": 24
+        },
+        {
+            "releaseTimeStamp": 1271980800,
+            "setName": "Rise of the Eldrazi",
+            "score": 24
+        },
+        {
+            "releaseTimeStamp": 1279238400,
+            "setName": "Magic 2011",
+            "score": 24
+        },
+        {
+            "releaseTimeStamp": 1285891200,
+            "setName": "Scars of Mirrodin",
+            "score": 24
+        },
+        {
+            "releaseTimeStamp": 1296777600,
+            "setName": "Mirrodin Besieged",
+            "score": 24
+        },
+        {
+            "releaseTimeStamp": 1305244800,
+            "setName": "New Phyrexia",
+            "score": 24
+        },
+        {
+            "releaseTimeStamp": 1310688000,
+            "setName": "Magic 2012",
+            "score": 24
+        },
+        {
+            "releaseTimeStamp": 1317340800,
+            "setName": "Innistrad",
+            "score": 26
+        },
+        {
+            "releaseTimeStamp": 1328227200,
+            "setName": "Dark Ascension",
+            "score": 26
+        },
+        {
+            "releaseTimeStamp": 1336089600,
+            "setName": "Avacyn Restored",
+            "score": 26
+        },
+        {
+            "releaseTimeStamp": 1342137600,
+            "setName": "Magic 2013",
+            "score": 26
+        },
+        {
+            "releaseTimeStamp": 1349395200,
+            "setName": "Return to Ravnica",
+            "score": 26
+        },
+        {
+            "releaseTimeStamp": 1359676800,
+            "setName": "Gatecrash",
+            "score": 26
+        },
+        {
+            "releaseTimeStamp": 1367539200,
+            "setName": "Dragon's Maze",
+            "score": 26
+        },
+        {
+            "releaseTimeStamp": 1374192000,
+            "setName": "Magic 2014",
+            "score": 26
+        },
+        {
+            "releaseTimeStamp": 1380240000,
+            "setName": "Theros",
+            "score": 26
+        },
+        {
+            "releaseTimeStamp": 1391731200,
+            "setName": "Born of the Gods",
+            "score": 26
+        },
+        {
+            "releaseTimeStamp": 1398988800,
+            "setName": "Journey into Nyx",
+            "score": 26
+        },
+        {
+            "releaseTimeStamp": 1405641600,
+            "setName": "Magic 2015",
+            "score": 26
+        },
+        {
+            "releaseTimeStamp": 1411689600,
+            "setName": "Khans of Tarkir",
+            "score": 26
+        },
+        {
+            "releaseTimeStamp": 1421971200,
+            "setName": "Fate Reforged",
+            "score": 26
+        },
+        {
+            "releaseTimeStamp": 1427414400,
+            "setName": "Dragons of Tarkir",
+            "score": 26
+        },
+        {
+            "releaseTimeStamp": 1437091200,
+            "setName": "Magic Origins",
+            "score": 26
+        },
+        {
+            "releaseTimeStamp": 1443744000,
+            "setName": "Battle for Zendikar",
+            "score": 26
+        },
+        {
+            "releaseTimeStamp": 1453420800,
+            "setName": "Oath of the Gatewatch",
+            "score": 26
+        },
+        {
+            "releaseTimeStamp": 1460073600,
+            "setName": "Shadows over Innistrad",
+            "score": 26
+        },
+        {
+            "releaseTimeStamp": 1469145600,
+            "setName": "Eldritch Moon",
+            "score": 26
+        },
+        {
+            "releaseTimeStamp": 1475193600,
+            "setName": "Kaladesh",
+            "score": 26
+        },
+        {
+            "releaseTimeStamp": 1484870400,
+            "setName": "Aether Revolt",
+            "score": 26
+        },
+        {
+            "releaseTimeStamp": 1493337600,
+            "setName": "Amonkhet",
+            "score": 26
+        },
+        {
+            "releaseTimeStamp": 1499990400,
+            "setName": "Hour of Devastation",
+            "score": 26
+        },
+        {
+            "releaseTimeStamp": 1506643200,
+            "setName": "Ixalan",
+            "score": 28
+        },
+        {
+            "releaseTimeStamp": 1516320000,
+            "setName": "Rivals of Ixalan",
+            "score": 28
+        },
+        {
+            "releaseTimeStamp": 1524787200,
+            "setName": "Dominaria",
+            "score": 28
+        },
+        {
+            "releaseTimeStamp": 1531440000,
+            "setName": "Core Set 2019",
+            "score": 28
+        },
+        {
+            "releaseTimeStamp": 1538697600,
+            "setName": "Guilds of Ravnica",
+            "score": 28
+        },
+        {
+            "releaseTimeStamp": 1548374400,
+            "setName": "Ravnica Allegiance",
+            "score": 28
+        },
+        {
+            "releaseTimeStamp": 1556841600,
+            "setName": "War of the Spark",
+            "score": 28
+        },
+        {
+            "releaseTimeStamp": 1562889600,
+            "setName": "Core Set 2020",
+            "score": 28
+        },
+        {
+            "releaseTimeStamp": 1570147200,
+            "setName": "Throne of Eldraine",
+            "score": 29
+        }
+    ]
+};
+
+    var _loadTribalData2 = function(){
+        var data = [];
+        for(var i = 0; i < historic_trend_json.series.length; i++){
+            var dataPoint = {};
+            dataPoint.x = new Date(historic_trend_json.series[i].releaseTimeStamp*1000);
+            dataPoint.y = historic_trend_json.series[i].score;
+            data.push(dataPoint);
+        }
+        return data;
+
+    }
+
+
+    new Chartist.Line('#tribal-cumulative-chart', {
+            series: [
+                {
+                    data: _loadTribalData2()
+                }
+            ]
+        },
+    {
+        showArea: true,
+        showLine: false,
+        showPoint: false,
+        axisX: {
+            showGrid: false,
+            type: Chartist.FixedScaleAxis,
+                ticks: _loadTribalTicks(),
+                labelInterpolationFnc: function(value) {return ""}
+        },
+        chartPadding: {
+            bottom: 100
+        },
+        plugins: [
+            Chartist.plugins.ctAxisTitle({
+                axisX: {
+
+                },
+                axisY: {
+                    axisTitle: "Unique Tribes",
+                    axisClass: "ct-axis-title",
+                    offset: {
+                        x: 0,
+                        y: -1160
+                    },
+                    flipTitle: false
+                }
+            })
+        ],
+        axisY: {
+                axisTitle: 'Unique Tribes',
+                offset: 80,
+                showGrid: false,
+                position: "right",
+                onlyInteger:true
+            }
+        }).on('draw', function(data) {
+
+            if(data.type === 'label' && data.axis === 'y') {
+
+                // We just offset the label X position to be in the middle between the current and next axis grid
+                data.element.attr({
+                    //style: 'stroke-width: 50px'
+
+                    style: 'padding-left:25px'
+                });
+            }
+
+            if(data.type === 'area') {
+                data.element.attr({
+                    //style: 'stroke-width: 50px'
+
+                    style: 'fill: #3b5998;fill-opacity:0.26'
+                });
+            }
+        }
+    );
+
+
+</script>
+<script type="text/javascript">
+
+    historic_trend_json = {
+    "series": [
+        {
+            "releaseTimeStamp": 744508800,
+            "setName": "Limited Edition Alpha",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 749692800,
+            "setName": "Limited Edition Beta",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 754704000,
+            "setName": "Unlimited Edition",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 756086400,
+            "setName": "Arabian Nights",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 762739200,
+            "setName": "Antiquities",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 765158400,
+            "setName": "Foreign Black Border",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 765158400,
+            "setName": "Revised Edition",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 770428800,
+            "setName": "Legends",
+            "score": 9
+        },
+        {
+            "releaseTimeStamp": 772156800,
+            "setName": "Summer Magic / Edgar",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 775699200,
+            "setName": "The Dark",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 783648000,
+            "setName": "Fallen Empires",
+            "score": 12
+        },
+        {
+            "releaseTimeStamp": 796694400,
+            "setName": "Fourth Edition Foreign Black Border",
+            "score": 7
+        },
+        {
+            "releaseTimeStamp": 796694400,
+            "setName": "Fourth Edition",
+            "score": 7
+        },
+        {
+            "releaseTimeStamp": 801964800,
+            "setName": "Ice Age",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 812505600,
+            "setName": "Homelands",
+            "score": 1
+        },
+        {
+            "releaseTimeStamp": 834364800,
+            "setName": "Alliances",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 844732800,
+            "setName": "Mirage",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 854928000,
+            "setName": "Visions",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 859161600,
+            "setName": "Fifth Edition",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 865814400,
+            "setName": "Weatherlight",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 876787200,
+            "setName": "Tempest",
+            "score": 5
+        },
+        {
+            "releaseTimeStamp": 888796800,
+            "setName": "Stronghold",
+            "score": 1
+        },
+        {
+            "releaseTimeStamp": 897868800,
+            "setName": "Exodus",
+            "score": 1
+        },
+        {
+            "releaseTimeStamp": 908150400,
+            "setName": "Urza's Saga",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 919036800,
+            "setName": "Urza's Legacy",
+            "score": 1
+        },
+        {
+            "releaseTimeStamp": 924652800,
+            "setName": "Classic Sixth Edition",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 928713600,
+            "setName": "Urza's Destiny",
+            "score": 1
+        },
+        {
+            "releaseTimeStamp": 938995200,
+            "setName": "Mercadian Masques",
+            "score": 15
+        },
+        {
+            "releaseTimeStamp": 950486400,
+            "setName": "Nemesis",
+            "score": 1
+        },
+        {
+            "releaseTimeStamp": 960163200,
+            "setName": "Prophecy",
+            "score": 1
+        },
+        {
+            "releaseTimeStamp": 970444800,
+            "setName": "Invasion",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 981331200,
+            "setName": "Planeshift",
+            "score": 1
+        },
+        {
+            "releaseTimeStamp": 986947200,
+            "setName": "Seventh Edition",
+            "score": 1
+        },
+        {
+            "releaseTimeStamp": 991612800,
+            "setName": "Apocalypse",
+            "score": 2
+        },
+        {
+            "releaseTimeStamp": 1001894400,
+            "setName": "Odyssey",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 1012780800,
+            "setName": "Torment",
+            "score": 1
+        },
+        {
+            "releaseTimeStamp": 1022457600,
+            "setName": "Judgment",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 1033948800,
+            "setName": "Onslaught",
+            "score": 81
+        },
+        {
+            "releaseTimeStamp": 1044230400,
+            "setName": "Legions",
+            "score": 94
+        },
+        {
+            "releaseTimeStamp": 1053907200,
+            "setName": "Scourge",
+            "score": 5
+        },
+        {
+            "releaseTimeStamp": 1059350400,
+            "setName": "Eighth Edition",
+            "score": 1
+        },
+        {
+            "releaseTimeStamp": 1065052800,
+            "setName": "Mirrodin",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 1076025600,
+            "setName": "Darksteel",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 1086307200,
+            "setName": "Fifth Dawn",
+            "score": 1
+        },
+        {
+            "releaseTimeStamp": 1096588800,
+            "setName": "Champions of Kamigawa",
+            "score": 50
+        },
+        {
+            "releaseTimeStamp": 1107475200,
+            "setName": "Betrayers of Kamigawa",
+            "score": 52
+        },
+        {
+            "releaseTimeStamp": 1117756800,
+            "setName": "Saviors of Kamigawa",
+            "score": 48
+        },
+        {
+            "releaseTimeStamp": 1122595200,
+            "setName": "Ninth Edition",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 1128643200,
+            "setName": "Ravnica: City of Guilds",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 1138924800,
+            "setName": "Guildpact",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 1146787200,
+            "setName": "Dissension",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 1153440000,
+            "setName": "Coldsnap",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 1160092800,
+            "setName": "Time Spiral",
+            "score": 13
+        },
+        {
+            "releaseTimeStamp": 1160092800,
+            "setName": "Time Spiral Timeshifted",
+            "score": 2
+        },
+        {
+            "releaseTimeStamp": 1170374400,
+            "setName": "Planar Chaos",
+            "score": 10
+        },
+        {
+            "releaseTimeStamp": 1178236800,
+            "setName": "Future Sight",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 1184284800,
+            "setName": "Tenth Edition",
+            "score": 1
+        },
+        {
+            "releaseTimeStamp": 1192147200,
+            "setName": "Lorwyn",
+            "score": 96
+        },
+        {
+            "releaseTimeStamp": 1201824000,
+            "setName": "Morningtide",
+            "score": 100
+        },
+        {
+            "releaseTimeStamp": 1209686400,
+            "setName": "Shadowmoor",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 1216944000,
+            "setName": "Eventide",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 1222992000,
+            "setName": "Shards of Alara",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 1233878400,
+            "setName": "Conflux",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 1241049600,
+            "setName": "Alara Reborn",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 1247788800,
+            "setName": "Magic 2010",
+            "score": 1
+        },
+        {
+            "releaseTimeStamp": 1254441600,
+            "setName": "Zendikar",
+            "score": 10
+        },
+        {
+            "releaseTimeStamp": 1265328000,
+            "setName": "Worldwake",
+            "score": 12
+        },
+        {
+            "releaseTimeStamp": 1271980800,
+            "setName": "Rise of the Eldrazi",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 1279238400,
+            "setName": "Magic 2011",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 1285891200,
+            "setName": "Scars of Mirrodin",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 1296777600,
+            "setName": "Mirrodin Besieged",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 1305244800,
+            "setName": "New Phyrexia",
+            "score": 1
+        },
+        {
+            "releaseTimeStamp": 1310688000,
+            "setName": "Magic 2012",
+            "score": 1
+        },
+        {
+            "releaseTimeStamp": 1317340800,
+            "setName": "Innistrad",
+            "score": 49
+        },
+        {
+            "releaseTimeStamp": 1328227200,
+            "setName": "Dark Ascension",
+            "score": 30
+        },
+        {
+            "releaseTimeStamp": 1336089600,
+            "setName": "Avacyn Restored",
+            "score": 38
+        },
+        {
+            "releaseTimeStamp": 1342137600,
+            "setName": "Magic 2013",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 1349395200,
+            "setName": "Return to Ravnica",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 1359676800,
+            "setName": "Gatecrash",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 1367539200,
+            "setName": "Dragon's Maze",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 1374192000,
+            "setName": "Magic 2014",
+            "score": 10
+        },
+        {
+            "releaseTimeStamp": 1380240000,
+            "setName": "Theros",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 1391731200,
+            "setName": "Born of the Gods",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 1398988800,
+            "setName": "Journey into Nyx",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 1405641600,
+            "setName": "Magic 2015",
+            "score": 1
+        },
+        {
+            "releaseTimeStamp": 1411689600,
+            "setName": "Khans of Tarkir",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 1421971200,
+            "setName": "Fate Reforged",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 1427414400,
+            "setName": "Dragons of Tarkir",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 1437091200,
+            "setName": "Magic Origins",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 1443744000,
+            "setName": "Battle for Zendikar",
+            "score": 20
+        },
+        {
+            "releaseTimeStamp": 1453420800,
+            "setName": "Oath of the Gatewatch",
+            "score": 23
+        },
+        {
+            "releaseTimeStamp": 1460073600,
+            "setName": "Shadows over Innistrad",
+            "score": 34
+        },
+        {
+            "releaseTimeStamp": 1469145600,
+            "setName": "Eldritch Moon",
+            "score": 24
+        },
+        {
+            "releaseTimeStamp": 1475193600,
+            "setName": "Kaladesh",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 1484870400,
+            "setName": "Aether Revolt",
+            "score": 1
+        },
+        {
+            "releaseTimeStamp": 1493337600,
+            "setName": "Amonkhet",
+            "score": 31
+        },
+        {
+            "releaseTimeStamp": 1499990400,
+            "setName": "Hour of Devastation",
+            "score": 23
+        },
+        {
+            "releaseTimeStamp": 1506643200,
+            "setName": "Ixalan",
+            "score": 73
+        },
+        {
+            "releaseTimeStamp": 1516320000,
+            "setName": "Rivals of Ixalan",
+            "score": 80
+        },
+        {
+            "releaseTimeStamp": 1524787200,
+            "setName": "Dominaria",
+            "score": 9
+        },
+        {
+            "releaseTimeStamp": 1531440000,
+            "setName": "Core Set 2019",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 1538697600,
+            "setName": "Guilds of Ravnica",
+            "score": 1
+        },
+        {
+            "releaseTimeStamp": 1548374400,
+            "setName": "Ravnica Allegiance",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 1556841600,
+            "setName": "War of the Spark",
+            "score": 0
+        },
+        {
+            "releaseTimeStamp": 1562889600,
+            "setName": "Core Set 2020",
+            "score": 15
+        },
+        {
+            "releaseTimeStamp": 1570147200,
+            "setName": "Throne of Eldraine",
+            "score": 29
+        }
+    ]
+};
+
+    var _loadTribalData = function(){
+        var data = [];
+        for(var i = 0; i < historic_trend_json.series.length; i++){
+            var dataPoint = {};
+            dataPoint.x = new Date(historic_trend_json.series[i].releaseTimeStamp*1000);
+            dataPoint.y = historic_trend_json.series[i].score;
+            dataPoint.value = {};
+            dataPoint.value.y = 100;//dataPoint.y;
+            dataPoint.value.x = dataPoint.x;
+            //dataPoint.value = historic_trend_json.series[i].score;
+            dataPoint.meta = historic_trend_json.series[i].setName;
+            data.push(dataPoint);
+        }
+        return data;
+
+    }
+
+    var _loadTribalTicks = function(){
+        var data = [];
+        var min = 1994;
+        var max = 2019;
+        for(var i = min; i <= max; i++){
+            var dataPoint = new Date(i + "-01-01 00:00:00")
+            data.push(dataPoint);
+        }
+        return data;
+
+    }
+
+    var trend_chart = new Chartist.Bar('#tribal-trend-chart-tool-tips', {
+            series: [
+                {
+                    data: _loadTribalData()
+                }
+            ]
+        },
+
+        {
+            plugins: [
+                Chartist.plugins.tooltip({
+                    transformTooltipTextFnc : yearVal,
+                    anchorToPoint: false
+                })
+            ],
+            high: 105,
+            axisX: {
+                showGrid: false,
+                type: Chartist.FixedScaleAxis,
+                ticks: _loadTribalTicks(),
+                labelInterpolationFnc: function(value) {
+                    return "";
+                }
+            },
+            chartPadding: {
+                bottom: 100
+            },
+            axisY: {
+                showGrid: false,
+                type: Chartist.FixedScaleAxis,
+                offset: 80,
+                ticks: [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
+                labelInterpolationFnc: function(value) {
+                    return ""
+                }
+            }
+        });
+
+    trend_chart.on('draw', function(context) {
+
+            if(context.type === 'bar') {
+                var color = context.value.y;//Math.random() * 100;//context.value;
+                context.element.attr({
+                    //style: 'stroke-width: 50px'
+                    style: 'stroke: hsl(' + color + ', 80%, 0%);opacity:0'
+                });
+            }
+        });
+
+
+</script>
+</div>
+<div id="largest-tribes" style="position:relative;">
+    <h3>Largest Tribes</h3>
+    <p>These are the most supported tribes within their respective sets (including reference cards)</p>
+    <div class="top-section">
+        <div class='winner-header'>1st Place: <a href='https://scryfall.com/search?as=grid&order=name&q=type:spirit+set:chk'>Spirit - Champions of Kamigawa (2004) - 73 Creatures / 42 References</a></div><table class='CardTable'><tr><td><table class='card-details'><tr><td><a href='https://scryfall.com/card/chk/117/horobi-deaths-wail?utm_source=api'><img class='card-image-large' src='https://img.scryfall.com/cards/large/front/b/4/b41983cb-c4e4-4384-bd69-df3fc6e74cd0.jpg?1562763702' border=0></a></td></tr></table></td><td><table class='card-details'><tr><td><a href='https://scryfall.com/card/chk/122/kokusho-the-evening-star?utm_source=api'><img class='card-image-large' src='https://img.scryfall.com/cards/large/front/6/3/63dc0698-e92f-4134-80e4-5cc37b80e37c.jpg?1562761014' border=0></a></td></tr></table></td><td><table class='card-details'><tr><td><a href='https://scryfall.com/card/chk/181/myojin-of-infinite-rage?utm_source=api'><img class='card-image-large' src='https://img.scryfall.com/cards/large/front/d/f/df630ae9-aa17-46e9-95e7-4980f4a76ade.jpg?1562765145' border=0></a></td></tr></table></td><td><table class='card-details'><tr><td><a href='https://scryfall.com/card/chk/114/he-who-hungers?utm_source=api'><img class='card-image-large' src='https://img.scryfall.com/cards/large/front/1/c/1ccf0f8d-f988-45ec-b75b-d97206326cfb.jpg?1562757975' border=0></a></td></tr></table></td><td><table class='card-details'><tr><td><a href='https://scryfall.com/card/chk/261/long-forgotten-gohei?utm_source=api'><img class='card-image-large' src='https://img.scryfall.com/cards/large/front/6/f/6fc4b500-ca74-4b90-9a8c-d4efa80ebe2c.jpg?1562761099' border=0></a></td></tr></table></td></tr></table><div class='second-place-header'>2nd: <a href='https://scryfall.com/search?as=grid&order=name&q=type:knight+set:eld'>Knight - Throne of Eldraine (2019) - 66 Creatures / 23 References</a></div><table class='CardTable'><tr><td><table class='card-details'><tr><td><a href='https://scryfall.com/card/eld/330/syr-gwyn-hero-of-ashvale?utm_source=api'><img class='card-image-small' src='https://img.scryfall.com/cards/small/front/a/3/a33add37-379d-4a90-9c04-529dff676986.jpg?1571282693' border=0></a></td></tr></table></td><td><table class='card-details'><tr><td><a href='https://scryfall.com/card/eld/383/stormfist-crusader?utm_source=api'><img class='card-image-small' src='https://img.scryfall.com/cards/small/front/5/1/516df79f-f2c1-43f1-af1a-c9a32820929b.jpg?1571692185' border=0></a></td></tr></table></td><td><table class='card-details'><tr><td><a href='https://scryfall.com/card/eld/36/worthy-knight?utm_source=api'><img class='card-image-small' src='https://img.scryfall.com/cards/small/front/4/b/4b2bde2d-e5df-407e-993c-85880dbb6045.jpg?1572489821' border=0></a></td></tr></table></td><td><table class='card-details'><tr><td><a href='https://scryfall.com/card/eld/124/fervent-champion?utm_source=api'><img class='card-image-small' src='https://img.scryfall.com/cards/small/front/c/5/c52d66db-5570-48a1-99cf-e0417517747b.jpg?1572490356' border=0></a></td></tr></table></td><td><table class='card-details'><tr><td><a href='https://scryfall.com/card/eld/1/acclaimed-contender?utm_source=api'><img class='card-image-small' src='https://img.scryfall.com/cards/small/front/f/b/fb6b12e7-bb93-4eb6-bad1-b256a6ccff4e.jpg?1572489601' border=0></a></td></tr></table></td></tr></table><div class='third-place-header'>3rd: <a href='https://scryfall.com/search?as=grid&order=name&q=type:spirit+set:bok'>Spirit - Betrayers of Kamigawa (2005) - 47 Creatures / 32 References</a></div><table class='CardTable'><tr><td><table class='card-details'><tr><td><a href='https://scryfall.com/card/bok/138/patron-of-the-orochi?utm_source=api'><img class='card-image-small' src='https://img.scryfall.com/cards/small/front/6/d/6d6787c4-170a-45b6-8792-af3ea32ef538.jpg?1562877671' border=0></a></td></tr></table></td><td><table class='card-details'><tr><td><a href='https://scryfall.com/card/bok/131/kodama-of-the-center-tree?utm_source=api'><img class='card-image-small' src='https://img.scryfall.com/cards/small/front/6/b/6b9264c5-1ecd-48cc-a12d-d4bd8050cfae.jpg?1562877634' border=0></a></td></tr></table></td><td><table class='card-details'><tr><td><a href='https://scryfall.com/card/bok/18/oyobi-who-split-the-heavens?utm_source=api'><img class='card-image-small' src='https://img.scryfall.com/cards/small/front/3/1/313bd276-2f69-447e-a2b1-240cf839614a.jpg?1562876313' border=0></a></td></tr></table></td><td><table class='card-details'><tr><td><a href='https://scryfall.com/card/bok/110/ishi-ishi-akki-crackshot?utm_source=api'><img class='card-image-small' src='https://img.scryfall.com/cards/small/front/8/e/8e94fec2-dc56-4961-ba80-b9c904a345ab.jpg?1562878352' border=0></a></td></tr></table></td><td><table class='card-details'><tr><td><a href='https://scryfall.com/card/bok/161/slumbering-tora?utm_source=api'><img class='card-image-small' src='https://img.scryfall.com/cards/small/front/e/3/e32ac983-a909-4342-882e-f3b7e2e064d8.jpg?1562880377' border=0></a></td></tr></table></td></tr></table>
+    </div>
+</div>
+
+<div id="frequent-tribes" style="position:relative;">
+    <h3>Recurring Tribes</h3>
+    <p>These tribes have been supported most frequently over the years</p>
+    <div class="top-section">
+        <div class='winner-header'>1st Place: Zombie - Appears in 6 sets</div><table class='CardTable'><tr><td><table class='card-details'><tr><td><a href='https://scryfall.com/card/isd/77/skaab-ruinator?utm_source=api'><img class='card-image-large' src='https://img.scryfall.com/cards/large/front/4/4/44c40cdc-a11a-47df-b902-d8fbe9014d03.jpg?1562829336' border=0></a></td></tr></table></td><td><table class='card-details'><tr><td><a href='https://scryfall.com/card/isd/214/grimgrin-corpse-born?utm_source=api'><img class='card-image-large' src='https://img.scryfall.com/cards/large/front/a/8/a8648734-ed6c-471f-91a1-6b710bbaf370.jpg?1562835166' border=0></a></td></tr></table></td><td><table class='card-details'><tr><td><a href='https://scryfall.com/card/hou/104/neheb-the-eternal?utm_source=api'><img class='card-image-large' src='https://img.scryfall.com/cards/large/front/5/4/54231832-d492-4812-b658-4ab9a30fefe2.jpg?1562799464' border=0></a></td></tr></table></td><td><table class='card-details'><tr><td><a href='https://scryfall.com/card/ons/152/gravespawn-sovereign?utm_source=api'><img class='card-image-large' src='https://img.scryfall.com/cards/large/front/e/1/e18dc249-a343-4198-bef9-e8092a2bac15.jpg?1562948670' border=0></a></td></tr></table></td><td><table class='card-details'><tr><td><a href='https://scryfall.com/card/ons/143/entrails-feaster?utm_source=api'><img class='card-image-large' src='https://img.scryfall.com/cards/large/front/c/d/cdddab92-3e1f-49dc-afd0-8c84d0d952c2.jpg?1562943619' border=0></a></td></tr></table></td></tr></table><div class='second-place-header'>2nd: Human- Appears in 5 sets</div><table class='CardTable'><tr><td><table class='card-details'><tr><td><a href='https://scryfall.com/card/emn/183/gisa-and-geralf?utm_source=api'><img class='card-image-small' src='https://img.scryfall.com/cards/small/front/2/e/2e2c85d8-0bef-40d0-abaf-4555462c29c5.jpg?1562729104' border=0></a></td></tr></table></td><td><table class='card-details'><tr><td><a href='https://scryfall.com/card/emn/184/grim-flayer?utm_source=api'><img class='card-image-small' src='https://img.scryfall.com/cards/small/front/0/2/025af99f-a029-4f99-9c76-676b68821520.jpg?1562723374' border=0></a></td></tr></table></td><td><table class='card-details'><tr><td><a href='https://scryfall.com/card/emn/191/ulrich-of-the-krallenhorde-ulrich-uncontested-alpha?utm_source=api'><img class='card-image-small' src='https://img.scryfall.com/cards/small/front/3/e/3e2011f0-a640-4579-bd67-1dfbc09b8c09.jpg?1562731266' border=0></a></td></tr></table></td><td><table class='card-details'><tr><td><a href='https://scryfall.com/card/isd/23/mikaeus-the-lunarch?utm_source=api'><img class='card-image-small' src='https://img.scryfall.com/cards/small/front/c/2/c22dc283-ea54-4344-b1ca-fd6cc05080d9.jpg?1562836569' border=0></a></td></tr></table></td><td><table class='card-details'><tr><td><a href='https://scryfall.com/card/dka/28/beguiler-of-wills?utm_source=api'><img class='card-image-small' src='https://img.scryfall.com/cards/small/front/e/2/e21ae024-d565-48a1-8004-5aa320a5d24d.jpg?1562948843' border=0></a></td></tr></table></td></tr></table><div class='third-place-header'>3rd: Sliver- Appears in 5 sets</div><table class='CardTable'><tr><td><table class='card-details'><tr><td><a href='https://scryfall.com/card/m14/57/galerider-sliver?utm_source=api'><img class='card-image-small' src='https://img.scryfall.com/cards/small/front/4/2/425f5d1b-9989-4fd1-88e2-6c3108aefa0b.jpg?1562828431' border=0></a></td></tr></table></td><td><table class='card-details'><tr><td><a href='https://scryfall.com/card/m14/185/megantic-sliver?utm_source=api'><img class='card-image-small' src='https://img.scryfall.com/cards/small/front/7/7/7745f6a9-400c-4200-9732-86c54247de46.jpg?1562831148' border=0></a></td></tr></table></td><td><table class='card-details'><tr><td><a href='https://scryfall.com/card/m14/9/bonescythe-sliver?utm_source=api'><img class='card-image-small' src='https://img.scryfall.com/cards/small/front/a/2/a26bb68b-1830-470a-8cea-91edc7db0c57.jpg?1562833120' border=0></a></td></tr></table></td><td><table class='card-details'><tr><td><a href='https://scryfall.com/card/m14/117/syphon-sliver?utm_source=api'><img class='card-image-small' src='https://img.scryfall.com/cards/small/front/8/5/85cb40e3-c3ed-4b3f-88ad-6f1305297c6f.jpg?1562831810' border=0></a></td></tr></table></td><td><table class='card-details'><tr><td><a href='https://scryfall.com/card/m14/158/thorncaster-sliver?utm_source=api'><img class='card-image-small' src='https://img.scryfall.com/cards/small/front/3/6/3655d837-945f-4ff5-8952-cff5f7b2d18f.jpg?1562827909' border=0></a></td></tr></table></td></tr></table>
+    </div>
+</div>
+
+<div id="snubbed-tribes" style="position:relative;">
+    <h3>Most Snubbed</h3>
+    <p>These creature types have had the most printings but have not been featured in any set as a supported tribe</p>
+    <div class="top-section">
+        <div class='winner-header'>1st Place: Shaman - 410 Cards</div><table class='CardTable'><tr><td><table class='card-details'><tr><td><a href='https://scryfall.com/card/ala/179/mayael-the-anima?utm_source=api'><img class='card-image-large' src='https://img.scryfall.com/cards/large/front/3/1/316b1fd1-5ec4-4bdc-938b-cbace1bb3f42.jpg?1562702547' border=0></a></td></tr></table></td><td><table class='card-details'><tr><td><a href='https://scryfall.com/card/m10/191/master-of-the-wild-hunt?utm_source=api'><img class='card-image-large' src='https://img.scryfall.com/cards/large/front/2/c/2cf3169c-f01c-47f4-ba4b-e199b7ade5fc.jpg?1561975118' border=0></a></td></tr></table></td><td><table class='card-details'><tr><td><a href='https://scryfall.com/card/wwk/81/dragonmaster-outcast?utm_source=api'><img class='card-image-large' src='https://img.scryfall.com/cards/large/front/c/2/c2297a4e-3c19-4748-9150-efbd2513066a.jpg?1562295452' border=0></a></td></tr></table></td><td><table class='card-details'><tr><td><a href='https://scryfall.com/card/mbs/92/thrun-the-last-troll?utm_source=api'><img class='card-image-large' src='https://img.scryfall.com/cards/large/front/5/d/5d393da0-4cb6-4ae8-b747-8e6d0fa7f55a.jpg?1562611602' border=0></a></td></tr></table></td><td><table class='card-details'><tr><td><a href='https://scryfall.com/card/jou/106/prophetic-flamespeaker?utm_source=api'><img class='card-image-large' src='https://img.scryfall.com/cards/large/front/7/3/73326c79-f884-42d5-8546-3db46ce4fe52.jpg?1562214773' border=0></a></td></tr></table></td></tr></table><div class='second-place-header'>2nd: Druid - 248 Cards</div><table class='CardTable'><tr><td><table class='card-details'><tr><td><a href='https://scryfall.com/card/kld/184/rashmi-eternities-crafter?utm_source=api'><img class='card-image-small' src='https://img.scryfall.com/cards/small/front/3/c/3ce37555-49a2-4112-95b4-f3376b55b45b.jpg?1562734314' border=0></a></td></tr></table></td><td><table class='card-details'><tr><td><a href='https://scryfall.com/card/eld/326/chulane-teller-of-tales?utm_source=api'><img class='card-image-small' src='https://img.scryfall.com/cards/small/front/8/3/83f43730-1c1f-4150-8771-d901c54bedc4.jpg?1571282906' border=0></a></td></tr></table></td><td><table class='card-details'><tr><td><a href='https://scryfall.com/card/lea/222/verduran-enchantress?utm_source=api'><img class='card-image-small' src='https://img.scryfall.com/cards/small/front/9/f/9f87178b-1221-4d7a-a7a5-20d7f01b8089.jpg?1559591314' border=0></a></td></tr></table></td><td><table class='card-details'><tr><td><a href='https://scryfall.com/card/ice/232/elder-druid?utm_source=api'><img class='card-image-small' src='https://img.scryfall.com/cards/small/front/2/1/210f6fab-62f0-42ab-bd01-00d647bd25e7.jpg?1562901131' border=0></a></td></tr></table></td><td><table class='card-details'><tr><td><a href='https://scryfall.com/card/hml/100/willow-priestess?utm_source=api'><img class='card-image-small' src='https://img.scryfall.com/cards/small/front/c/6/c636a608-26d7-4154-8052-a093b11362b1.jpg?1562588241' border=0></a></td></tr></table></td></tr></table><div class='third-place-header'>3rd: Dragon - 224 Cards</div><table class='CardTable'><tr><td><table class='card-details'><tr><td><a href='https://scryfall.com/card/ala/172/hellkite-overlord?utm_source=api'><img class='card-image-small' src='https://img.scryfall.com/cards/small/front/8/9/89185829-5c93-4fd9-8c56-11820be6a970.jpg?1562706326' border=0></a></td></tr></table></td><td><table class='card-details'><tr><td><a href='https://scryfall.com/card/con/117/malfegor?utm_source=api'><img class='card-image-small' src='https://img.scryfall.com/cards/small/front/7/e/7e84de2e-3676-4112-823b-549c4d132280.jpg?1562802051' border=0></a></td></tr></table></td><td><table class='card-details'><tr><td><a href='https://scryfall.com/card/arb/117/karrthus-tyrant-of-jund?utm_source=api'><img class='card-image-small' src='https://img.scryfall.com/cards/small/front/7/9/7956a90f-e27b-4d5a-bc23-70e878b2dfeb.jpg?1562642272' border=0></a></td></tr></table></td><td><table class='card-details'><tr><td><a href='https://scryfall.com/card/arb/53/dragon-broodmother?utm_source=api'><img class='card-image-small' src='https://img.scryfall.com/cards/small/front/f/7/f7f99431-ae43-4b68-82f0-faf940216c91.jpg?1562645170' border=0></a></td></tr></table></td><td><table class='card-details'><tr><td><a href='https://scryfall.com/card/som/79/skithiryx-the-blight-dragon?utm_source=api'><img class='card-image-small' src='https://img.scryfall.com/cards/small/front/c/9/c930c9cc-1b64-4f36-afe2-6bf120a74ce2.jpg?1562822982' border=0></a></td></tr></table></td></tr></table>
+    </div>
+</div>
+
+<div id="all-sets" style="position:relative;">
+    <h3>All Sets</h3>
+    <p>This is a raw output of all the tribes found in each set, in reverse chronological order. Provided for completeness</p>
+    <div class="top-section">
+        <div class='card-set-details-name'>Throne of Eldraine (2019) - 29% Tribal</div><ul class='card-set-details'><li><a href='https://scryfall.com/search?as=grid&order=name&q=type:knight+set:eld'>Knight</a> - 66 Creatures / 23 References </li></ul><div class='card-set-details-name'>Core Set 2020 (2019) - 15% Tribal</div><ul class='card-set-details'><li><a href='https://scryfall.com/search?as=grid&order=name&q=type:elemental+set:m20'>Elemental</a> - 34 Creatures / 10 References </li></ul><div class='card-set-details-name'>Dominaria (2018) - 9% Tribal</div><ul class='card-set-details'><li><a href='https://scryfall.com/search?as=grid&order=name&q=type:wizard+set:dom'>Wizard</a> - 15 Creatures / 9 References </li></ul><div class='card-set-details-name'>Rivals of Ixalan (2018) - 80% Tribal</div><ul class='card-set-details'><li><a href='https://scryfall.com/search?as=grid&order=name&q=type:dinosaur+set:rix'>Dinosaur</a> - 33 Creatures / 11 References </li><li><a href='https://scryfall.com/search?as=grid&order=name&q=type:pirate+set:rix'>Pirate</a> - 28 Creatures / 10 References </li><li><a href='https://scryfall.com/search?as=grid&order=name&q=type:vampire+set:rix'>Vampire</a> - 21 Creatures / 9 References </li><li><a href='https://scryfall.com/search?as=grid&order=name&q=type:merfolk+set:rix'>Merfolk</a> - 18 Creatures / 9 References </li></ul><div class='card-set-details-name'>Ixalan (2017) - 73% Tribal</div><ul class='card-set-details'><li><a href='https://scryfall.com/search?as=grid&order=name&q=type:dinosaur+set:xln'>Dinosaur</a> - 39 Creatures / 15 References </li><li><a href='https://scryfall.com/search?as=grid&order=name&q=type:pirate+set:xln'>Pirate</a> - 40 Creatures / 11 References </li><li><a href='https://scryfall.com/search?as=grid&order=name&q=type:merfolk+set:xln'>Merfolk</a> - 22 Creatures / 8 References </li><li><a href='https://scryfall.com/search?as=grid&order=name&q=type:vampire+set:xln'>Vampire</a> - 22 Creatures / 7 References </li></ul><div class='card-set-details-name'>Hour of Devastation (2017) - 23% Tribal</div><ul class='card-set-details'><li><a href='https://scryfall.com/search?as=grid&order=name&q=type:zombie+set:hou'>Zombie</a> - 21 Creatures / 17 References </li></ul><div class='card-set-details-name'>Amonkhet (2017) - 31% Tribal</div><ul class='card-set-details'><li><a href='https://scryfall.com/search?as=grid&order=name&q=type:zombie+set:akh'>Zombie</a> - 19 Creatures / 19 References </li><li><a href='https://scryfall.com/search?as=grid&order=name&q=type:warrior+set:akh'>Warrior</a> - 32 Creatures / 5 References </li></ul><div class='card-set-details-name'>Eldritch Moon (2016) - 24% Tribal</div><ul class='card-set-details'><li><a href='https://scryfall.com/search?as=grid&order=name&q=type:human+set:emn'>Human</a> - 33 Creatures / 5 References </li></ul><div class='card-set-details-name'>Shadows over Innistrad (2016) - 34% Tribal</div><ul class='card-set-details'><li><a href='https://scryfall.com/search?as=grid&order=name&q=type:human+set:soi'>Human</a> - 49 Creatures / 6 References </li><li><a href='https://scryfall.com/search?as=grid&order=name&q=type:vampire+set:soi'>Vampire</a> - 19 Creatures / 6 References </li></ul><div class='card-set-details-name'>Oath of the Gatewatch (2016) - 23% Tribal</div><ul class='card-set-details'><li><a href='https://scryfall.com/search?as=grid&order=name&q=type:ally+set:ogw'>Ally</a> - 29 Creatures / 9 References </li></ul><div class='card-set-details-name'>Battle for Zendikar (2015) - 20% Tribal</div><ul class='card-set-details'><li><a href='https://scryfall.com/search?as=grid&order=name&q=type:ally+set:bfz'>Ally</a> - 40 Creatures / 18 References </li></ul><div class='card-set-details-name'>Magic 2014 (2013) - 10% Tribal</div><ul class='card-set-details'><li><a href='https://scryfall.com/search?as=grid&order=name&q=type:sliver+set:m14'>Sliver</a> - 15 Creatures / 13 References </li></ul><div class='card-set-details-name'>Avacyn Restored (2012) - 38% Tribal</div><ul class='card-set-details'><li><a href='https://scryfall.com/search?as=grid&order=name&q=type:human+set:avr'>Human</a> - 45 Creatures / 12 References </li><li><a href='https://scryfall.com/search?as=grid&order=name&q=type:zombie+set:avr'>Zombie</a> - 10 Creatures / 5 References </li></ul><div class='card-set-details-name'>Dark Ascension (2012) - 30% Tribal</div><ul class='card-set-details'><li><a href='https://scryfall.com/search?as=grid&order=name&q=type:human+set:dka'>Human</a> - 24 Creatures / 10 References </li></ul><div class='card-set-details-name'>Innistrad (2011) - 49% Tribal</div><ul class='card-set-details'><li><a href='https://scryfall.com/search?as=grid&order=name&q=type:human+set:isd'>Human</a> - 46 Creatures / 13 References </li><li><a href='https://scryfall.com/search?as=grid&order=name&q=type:zombie+set:isd'>Zombie</a> - 17 Creatures / 9 References </li><li><a href='https://scryfall.com/search?as=grid&order=name&q=type:vampire+set:isd'>Vampire</a> - 12 Creatures / 7 References </li></ul><div class='card-set-details-name'>Worldwake (2010) - 12% Tribal</div><ul class='card-set-details'><li><a href='https://scryfall.com/search?as=grid&order=name&q=type:ally+set:wwk'>Ally</a> - 12 Creatures / 8 References </li></ul><div class='card-set-details-name'>Zendikar (2009) - 10% Tribal</div><ul class='card-set-details'><li><a href='https://scryfall.com/search?as=grid&order=name&q=type:ally+set:zen'>Ally</a> - 19 Creatures / 17 References </li></ul><div class='card-set-details-name'>Morningtide (2008) - 100% Tribal</div><ul class='card-set-details'><li><a href='https://scryfall.com/search?as=grid&order=name&q=type:warrior+set:mor'>Warrior</a> - 19 Creatures / 7 References </li><li><a href='https://scryfall.com/search?as=grid&order=name&q=type:elemental+set:mor'>Elemental</a> - 20 Creatures / 5 References </li><li><a href='https://scryfall.com/search?as=grid&order=name&q=type:rogue+set:mor'>Rogue</a> - 14 Creatures / 11 References </li><li><a href='https://scryfall.com/search?as=grid&order=name&q=type:wizard+set:mor'>Wizard</a> - 11 Creatures / 7 References </li><li><a href='https://scryfall.com/search?as=grid&order=name&q=type:goblin+set:mor'>Goblin</a> - 12 Creatures / 6 References </li><li><a href='https://scryfall.com/search?as=grid&order=name&q=type:treefolk+set:mor'>Treefolk</a> - 10 Creatures / 6 References </li></ul><div class='card-set-details-name'>Lorwyn (2007) - 96% Tribal</div><ul class='card-set-details'><li><a href='https://scryfall.com/search?as=grid&order=name&q=type:elemental+set:lrw'>Elemental</a> - 34 Creatures / 8 References </li><li><a href='https://scryfall.com/search?as=grid&order=name&q=type:goblin+set:lrw'>Goblin</a> - 23 Creatures / 16 References </li><li><a href='https://scryfall.com/search?as=grid&order=name&q=type:merfolk+set:lrw'>Merfolk</a> - 20 Creatures / 14 References </li><li><a href='https://scryfall.com/search?as=grid&order=name&q=type:elf+set:lrw'>Elf</a> - 23 Creatures / 9 References </li><li><a href='https://scryfall.com/search?as=grid&order=name&q=type:kithkin+set:lrw'>Kithkin</a> - 21 Creatures / 9 References </li><li><a href='https://scryfall.com/search?as=grid&order=name&q=type:faerie+set:lrw'>Faerie</a> - 16 Creatures / 10 References </li><li><a href='https://scryfall.com/search?as=grid&order=name&q=type:treefolk+set:lrw'>Treefolk</a> - 14 Creatures / 11 References </li><li><a href='https://scryfall.com/search?as=grid&order=name&q=type:giant+set:lrw'>Giant</a> - 13 Creatures / 10 References </li></ul><div class='card-set-details-name'>Planar Chaos (2007) - 10% Tribal</div><ul class='card-set-details'><li><a href='https://scryfall.com/search?as=grid&order=name&q=type:sliver+set:plc'>Sliver</a> - 11 Creatures / 11 References </li></ul><div class='card-set-details-name'>Time Spiral (2006) - 13% Tribal</div><ul class='card-set-details'><li><a href='https://scryfall.com/search?as=grid&order=name&q=type:sliver+set:tsp'>Sliver</a> - 26 Creatures / 26 References </li></ul><div class='card-set-details-name'>Saviors of Kamigawa (2005) - 48% Tribal</div><ul class='card-set-details'><li><a href='https://scryfall.com/search?as=grid&order=name&q=type:spirit+set:sok'>Spirit</a> - 52 Creatures / 22 References </li></ul><div class='card-set-details-name'>Betrayers of Kamigawa (2005) - 52% Tribal</div><ul class='card-set-details'><li><a href='https://scryfall.com/search?as=grid&order=name&q=type:spirit+set:bok'>Spirit</a> - 47 Creatures / 32 References </li></ul><div class='card-set-details-name'>Champions of Kamigawa (2004) - 50% Tribal</div><ul class='card-set-details'><li><a href='https://scryfall.com/search?as=grid&order=name&q=type:spirit+set:chk'>Spirit</a> - 73 Creatures / 42 References </li><li><a href='https://scryfall.com/search?as=grid&order=name&q=type:samurai+set:chk'>Samurai</a> - 17 Creatures / 7 References </li></ul><div class='card-set-details-name'>Legions (2003) - 94% Tribal</div><ul class='card-set-details'><li><a href='https://scryfall.com/search?as=grid&order=name&q=type:beast+set:lgn'>Beast</a> - 21 Creatures / 8 References </li><li><a href='https://scryfall.com/search?as=grid&order=name&q=type:sliver+set:lgn'>Sliver</a> - 15 Creatures / 14 References </li><li><a href='https://scryfall.com/search?as=grid&order=name&q=type:cleric+set:lgn'>Cleric</a> - 18 Creatures / 5 References </li><li><a href='https://scryfall.com/search?as=grid&order=name&q=type:goblin+set:lgn'>Goblin</a> - 15 Creatures / 7 References </li><li><a href='https://scryfall.com/search?as=grid&order=name&q=type:zombie+set:lgn'>Zombie</a> - 11 Creatures / 9 References </li><li><a href='https://scryfall.com/search?as=grid&order=name&q=type:bird+set:lgn'>Bird</a> - 11 Creatures / 5 References </li></ul><div class='card-set-details-name'>Onslaught (2002) - 81% Tribal</div><ul class='card-set-details'><li><a href='https://scryfall.com/search?as=grid&order=name&q=type:beast+set:ons'>Beast</a> - 30 Creatures / 11 References </li><li><a href='https://scryfall.com/search?as=grid&order=name&q=type:wizard+set:ons'>Wizard</a> - 23 Creatures / 14 References </li><li><a href='https://scryfall.com/search?as=grid&order=name&q=type:cleric+set:ons'>Cleric</a> - 26 Creatures / 11 References </li><li><a href='https://scryfall.com/search?as=grid&order=name&q=type:goblin+set:ons'>Goblin</a> - 17 Creatures / 15 References </li><li><a href='https://scryfall.com/search?as=grid&order=name&q=type:zombie+set:ons'>Zombie</a> - 21 Creatures / 10 References </li><li><a href='https://scryfall.com/search?as=grid&order=name&q=type:soldier+set:ons'>Soldier</a> - 20 Creatures / 9 References </li><li><a href='https://scryfall.com/search?as=grid&order=name&q=type:elf+set:ons'>Elf</a> - 17 Creatures / 8 References </li></ul><div class='card-set-details-name'>Mercadian Masques (1999) - 15% Tribal</div><ul class='card-set-details'><li><a href='https://scryfall.com/search?as=grid&order=name&q=type:mercenary+set:mmq'>Mercenary</a> - 16 Creatures / 8 References </li><li><a href='https://scryfall.com/search?as=grid&order=name&q=type:rebel+set:mmq'>Rebel</a> - 17 Creatures / 5 References </li></ul><div class='card-set-details-name'>Tempest (1997) - 5% Tribal</div><ul class='card-set-details'><li><a href='https://scryfall.com/search?as=grid&order=name&q=type:sliver+set:tmp'>Sliver</a> - 11 Creatures / 10 References </li></ul><div class='card-set-details-name'>Fourth Edition Foreign Black Border (1995) - 7% Tribal</div><ul class='card-set-details'><li><a href='https://scryfall.com/search?as=grid&order=name&q=type:wall+set:4bb'>Wall</a> - 12 Creatures / 7 References </li></ul><div class='card-set-details-name'>Fourth Edition (1995) - 7% Tribal</div><ul class='card-set-details'><li><a href='https://scryfall.com/search?as=grid&order=name&q=type:wall+set:4ed'>Wall</a> - 12 Creatures / 7 References </li></ul><div class='card-set-details-name'>Fallen Empires (1994) - 12% Tribal</div><ul class='card-set-details'><li><a href='https://scryfall.com/search?as=grid&order=name&q=type:orc+set:fem'>Orc</a> - 12 Creatures / 5 References </li></ul><div class='card-set-details-name'>Legends (1994) - 9% Tribal</div><ul class='card-set-details'><li><a href='https://scryfall.com/search?as=grid&order=name&q=type:wall+set:leg'>Wall</a> - 11 Creatures / 11 References </li></ul>
+    </div>
+</div>
+
+
+</body>
+</html>

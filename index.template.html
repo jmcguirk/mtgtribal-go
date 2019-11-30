@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Tribes Report</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:700,400,400italic,700italic,100" rel="stylesheet">
+    <style type="text/css">
+        html {
+            box-sizing: border-box;
+            font-family: Roboto, sans-serif;
+        }
+
+        *, *:before, *:after {
+            box-sizing: inherit;
+        }
+        .axis_label{
+            text-align:center;
+        }
+
+        .chartist-tooltip {
+            position: absolute;
+            display: inline-block;
+            opacity: 0;
+            min-width: 5em;
+            padding: .5em;
+            background: #3b5998;
+            color: #FEFEFE;
+            font-family: Oxygen,Helvetica,Arial,sans-serif;
+            font-weight: 700;
+            text-align: center;
+            pointer-events: none;
+            z-index: 1;
+            -webkit-transition: opacity .2s linear;
+            -moz-transition: opacity .2s linear;
+            -o-transition: opacity .2s linear;
+            transition: opacity .2s linear; }
+        .chartist-tooltip:before {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            margin-left: -15px;
+            border: 15px solid transparent;
+            border-top-color: #3b5998; }
+        .chartist-tooltip.tooltip-show {
+            opacity: 1; }
+
+        .ct-area, .ct-line {
+            pointer-events: none; }
+
+        .top-section {
+            margin-left:60px;
+        }
+
+        .card-image-large{
+            width:250px
+        }
+
+        .winner-header {
+            font-weight:bold;
+            font-size:1.1em
+        }
+
+        .card-set-details-name{
+            font-weight:bold;
+        }
+
+        .report-generation-description {
+            color:#606060;
+            font-size:0.8em;
+            position:relative;
+            top:-15px;
+        }
+
+        .intro-section {
+            width: 1200px;
+        }
+
+    </style>
+</head>
+<body>
+<script src="https://cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
+<script src="https://momentjs.com/downloads/moment.js"></script>
+
+<link href="https://cdn.jsdelivr.net/chartist.js/latest/chartist.min.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript">
+    /* chartist-plugin-tooltip 0.0.18
+* Copyright © 2017 Markus Padourek
+* Free to use under the WTFPL license.
+* http://www.wtfpl.net/
+*/
+
+    !function(a,b){"function"==typeof define&&define.amd?define(["chartist"],function(c){return a.returnExportsGlobal=b(c)}):"object"==typeof exports?module.exports=b(require("chartist")):a["Chartist.plugins.tooltip"]=b(Chartist)}(this,function(a){return function(a,b,c){"use strict";function d(a){f(a,"tooltip-show")||(a.className=a.className+" tooltip-show")}function e(a){var b=new RegExp("tooltip-show\\s*","gi");a.className=a.className.replace(b,"").trim()}function f(a,b){return(" "+a.getAttribute("class")+" ").indexOf(" "+b+" ")>-1}function g(a,b){do{a=a.nextSibling}while(a&&!f(a,b));return a}function h(a){return a.innerText||a.textContent}var i={currency:void 0,currencyFormatCallback:void 0,tooltipOffset:{x:0,y:-20},anchorToPoint:!1,appendToBody:!1,class:void 0,pointClass:"ct-point"};c.plugins=c.plugins||{},c.plugins.tooltip=function(j){return j=c.extend({},i,j),function(i){function k(a,b,c){n.addEventListener(a,function(a){b&&!f(a.target,b)||c(a)})}function l(b){p=p||o.offsetHeight,q=q||o.offsetWidth;var c,d,e=-q/2+j.tooltipOffset.x,f=-p+j.tooltipOffset.y;if(j.appendToBody)o.style.top=b.pageY+f+"px",o.style.left=b.pageX+e+"px";else{var g=n.getBoundingClientRect(),h=b.pageX-g.left-a.pageXOffset,i=b.pageY-g.top-a.pageYOffset;!0===j.anchorToPoint&&b.target.x2&&b.target.y2&&(c=parseInt(b.target.x2.baseVal.value),d=parseInt(b.target.y2.baseVal.value)),o.style.top=(d||i)+f+"px",o.style.left=(c||h)+e+"px"}}var m=j.pointClass;i.constructor.name==c.Bar.prototype.constructor.name?m="ct-bar":i.constructor.name==c.Pie.prototype.constructor.name&&(m=i.options.donut?"ct-slice-donut":"ct-slice-pie");var n=i.container,o=n.querySelector(".chartist-tooltip");o||(o=b.createElement("div"),o.className=j.class?"chartist-tooltip "+j.class:"chartist-tooltip",j.appendToBody?b.body.appendChild(o):n.appendChild(o));var p=o.offsetHeight,q=o.offsetWidth;e(o),k("mouseover",m,function(a){var e=a.target,f="",k=i instanceof c.Pie?e:e.parentNode,m=k?e.parentNode.getAttribute("ct:meta")||e.parentNode.getAttribute("ct:series-name"):"",n=e.getAttribute("ct:meta")||m||"",r=!!n,s=e.getAttribute("ct:value");if(j.transformTooltipTextFnc&&"function"==typeof j.transformTooltipTextFnc&&(s=j.transformTooltipTextFnc(s)),j.tooltipFnc&&"function"==typeof j.tooltipFnc)f=j.tooltipFnc(n,s);else{if(j.metaIsHTML){var t=b.createElement("textarea");t.innerHTML=n,n=t.value}if(n='<span class="chartist-tooltip-meta">'+n+"</span>",r)f+=n+"<br>";else if(i instanceof c.Pie){var u=g(e,"ct-label");u&&(f+=h(u)+"<br>")}s&&(j.currency&&(s=void 0!=j.currencyFormatCallback?j.currencyFormatCallback(s,j):j.currency+s.replace(/(\d)(?=(\d{3})+(?:\.\d+)?$)/g,"$1,")),s='<span class="chartist-tooltip-value">'+s+"</span>",f+=s)}f&&(o.innerHTML=f,l(a),d(o),p=o.offsetHeight,q=o.offsetWidth)}),k("mouseout",m,function(){e(o)}),k("mousemove",null,function(a){!1===j.anchorToPoint&&l(a)})}}}(window,document,a),a.plugins.tooltip});
+    //# sourceMappingURL=chartist-plugin-tooltip.min.js.map
+
+    !function(a,b){"function"==typeof define&&define.amd?define(["chartist"],function(c){return a.returnExportsGlobal=b(c)}):"object"==typeof exports?module.exports=b(require("chartist")):a["Chartist.plugins.ctAxisTitle"]=b(Chartist)}(this,function(a){return function(a,b,c){"use strict";var d={axisTitle:"",axisClass:"ct-axis-title",offset:{x:0,y:0},textAnchor:"middle",flipTitle:!1},e={axisX:d,axisY:d},f=function(a){return a instanceof Function?a():a},g=function(a){return a instanceof Function?a():a};c.plugins=c.plugins||{},c.plugins.ctAxisTitle=function(a){return a=c.extend({},e,a),function(b){b.on("created",function(b){if(!a.axisX.axisTitle&&!a.axisY.axisTitle)throw new Error("ctAxisTitle plugin - You must provide at least one axis title");if(!b.axisX&&!b.axisY)throw new Error("ctAxisTitle plugin can only be used on charts that have at least one axis");var d,e,h,i=c.normalizePadding(b.options.chartPadding);if(a.axisX.axisTitle&&b.axisX&&(d=b.axisX.axisLength/2+b.options.axisY.offset+i.left,e=i.top,"end"===b.options.axisY.position&&(d-=b.options.axisY.offset),"end"===b.options.axisX.position&&(e+=b.axisY.axisLength),h=new c.Svg("text"),h.addClass(g(a.axisX.axisClass)),h.text(f(a.axisX.axisTitle)),h.attr({x:d+a.axisX.offset.x,y:e+a.axisX.offset.y,"text-anchor":a.axisX.textAnchor}),b.svg.append(h,!0)),a.axisY.axisTitle&&b.axisY){d=0,e=b.axisY.axisLength/2+i.top,"start"===b.options.axisX.position&&(e+=b.options.axisX.offset),"end"===b.options.axisY.position&&(d=b.axisX.axisLength);var j="rotate("+(a.axisY.flipTitle?-90:90)+", "+d+", "+e+")";h=new c.Svg("text"),h.addClass(g(a.axisY.axisClass)),h.text(f(a.axisY.axisTitle)),h.attr({x:d+a.axisY.offset.x,y:e+a.axisY.offset.y,transform:j,"text-anchor":a.axisY.textAnchor}),b.svg.append(h,!0)}})}}}(window,document,a),a.plugins.ctAxisTitle});
+</script>
+
+<h2>Tribal Report</h2>
+<div class="report-generation-description">%GENERATION_DESCRIPTION%</div>
+<div class="intro-section">
+    <p>Hello! This is a generated snapshot report for Tribes in the popular collectible trading card game - Magic: The Gathering. The analysis is done by looking for tribes within each expansion and core set. A tribe of cards is a particular creature type, cards that can produce creature tokens up that type and a group of cards that reference that type (generally but not explicitly supporting that type).</p
+    <p>A tribe is <strong>supported</strong> if it meets three criteria:</p>
+    <ol>
+        <li>
+            <strong>Creature Count (%CREATURE_COUNT%)</strong> - The tribe must contain at least %CREATURE_COUNT% creatures to be considered supported. For the purposes of this analysis and for simplicity, cards that generate counters are considered creatures regardless of their underlying type
+        </li>
+        <li>
+            <strong>Common Creature Count (%COMMON_CREATURE_COUNT%)</strong> - Of the creatures in the tribe, atleast %COMMON_CREATURE_COUNT% must be at common. This is a signpost that the type is supported within a limited environment.
+        </li>
+        <li>
+            <strong>Reference Count (%REFERENCE_COUNT%)</strong> - There must be atleast %REFERENCE_COUNT% cards within the set that reference this type within the card's Oracle Text.
+        </li>
+    </ol>
+        <p>These criteria are not precise, and the values assigned to them have been tweaked empirically in a way that the tribes it identifies are roughly in line with other resources that identify tribes within these sets</p>
+        <p>We assigned a set a <strong>Tribal Score</strong> based off of the percentage of cards within that set that fall within a supported tribe - or act like a wildcard (ex: Shapeshifters). That score is normalized against the peak (which is generally regarded to be the Lowryn Block).
+        <p>Sections:</p>
+            <ul>
+                <li><a href="#top-20-tribal-sets">Top 20 Tribal Sets</a> - How "tribal" are different sets?</li>
+                <li><a href="#tribal-trend-section">Tribal Trends</a> - How has the usage of "tribal matters" mechancis faired over time?</li>
+                <li><a href="#largest-tribes">Largest Tribes</a> - Which tribes are the most supported?</li>
+                <li><a href="#frequent-tribes">Recurring Tribes</a> - Which tribes occur most frequently?</li>
+                <li><a href="#snubbed-tribes">Most Snubbed Tribes</a> - Which creature types get printed frequently but do not appear as supported mechanics?</li>
+                <li><a href="#all-sets">All Sets/All Tribes</a> - Raw listing of all detected tribes</li>
+            </ul>
+
+        <p>Links:</p>
+        <ul>
+            <li><a href="#">Reddit Thread</a> - Any questions or feedback on the approach can be tossed in here</li>
+            <li><a href="https://scryfall.com/docs/api">Scryfall API Documentation</a> - The Scryfall APIs and data resources are what power this report under the hood. These are high quality, invaluable and highly recommended</li>
+            <li><a href="https://gionkunz.github.io/chartist-js/"/>Chartist.js<a/> - The two charts generated in these reports leverage the fantastic Chartist APIs to render</li>
+            <li><a href="https://github.com/jmcguirk/mtgtribal-go">Github Source</a> - The source for generating the project can be found here. The implementation of a golang data model for the Scryfall might be interesting, the HTML generation is pretty bad :)</li>
+        </ul>
+</div>
+<div id="top-20-tribal-sets">
+    <h3>Top 20 Tribal Sets</h3>
+    <p>These are the top 20 core and expansion sets based on their calculated tribal score, min-max normalized.</p>
+
+    <div class="ct-chart ct-golden-section" style="width:1200px;height:640px" id="top-sets-chart"></div>
+    <script type="text/javascript">
+
+        var percentify = function(val) {
+            return val + "%";
+        }
+
+        var yearVal = function(val) {
+            val = val.split(",")[0];
+            //return val;
+
+            return new Date(parseInt(val)).getFullYear();
+        }
+
+        top_20_sets_by_tribes = %TOP_SETS_CHART_JSON%;
+
+        new Chartist.Bar('#top-sets-chart', top_20_sets_by_tribes, {
+            high: 105,
+            low: 0,
+            chartPadding: {
+                bottom: 30
+            },
+            distributeSeries:true,
+            seriesBarDistance: 10,
+            axisX: {
+                offset: 60
+            },
+            plugins: [
+                Chartist.plugins.tooltip({
+                    pointClass: '.top-set-data-point',
+                    transformTooltipTextFnc : percentify,
+                    anchorToPoint: false
+                })
+            ],
+            axisY: {
+                type: Chartist.FixedScaleAxis,
+                offset: 80,
+                ticks: [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
+                labelInterpolationFnc: function(value) {
+                    return value + '%'
+                }
+            }
+        }).on('draw', function(context) {
+            if(context.type === 'bar') {
+                var color = context.value.y;//Math.random() * 100;//context.value;
+                context.element.attr({
+                    //style: 'stroke-width: 50px'
+
+                    style: 'stroke: hsl(' + color + ', 80%, 50%);stroke-width:40px'
+                });
+            }
+            if (context.type === 'label' &&
+                context.axis.units.pos === 'x') {
+                //debugger;
+
+                var group = new Chartist.Svg('g');
+
+                group.append(
+                    new Chartist.Svg('image', {
+                        'xlink:href': context.text.image,
+                        width: '30px',
+                        height: '30px',
+                        x: context.x - 15 + (context.width/2),
+                        y: context.y + 5
+                    })
+                );
+
+
+                /*var textHtml = ['<p class="axis_label">', context.text.label, '</p>'].join('');
+                group.append(new Chartist.Svg('svg').foreignObject(textHtml, {
+                    width: '110px',
+                    height: '300px',
+                    x: context.x,
+                    y: context.y + 20,
+                    'text-anchor': 'middle',
+                    'alignment-baseline': 'hanging'
+                }));*/
+
+                context.element.replace(group);;
+            }
+        });
+    </script>
+</div>
+
+
+<div id="tribal-trend-section" style="height:600px">
+<h3>Tribal Trend</h3>
+<p>Here's how the tribe score has trended over the last 25 years of expansions and how many unique tribes have been in the game</p>
+
+<div class="ct-chart ct-golden-section" style="width:1200px;height:600px;position:relative;left:80px;" id="tribal-cumulative-chart"></div>
+<div class="ct-chart ct-golden-section" style="width:1200px;height:600px;position:relative;top:-600px" id="tribal-trend-chart"></div>
+<div class="ct-chart ct-golden-section" style="width:1200px;height:600px;position:relative;top:-1220px;" id="tribal-trend-chart-tool-tips"></div>
+<script type="text/javascript">
+
+    historic_trend_json = %HISTORIC_TREND_CHART_JSON%;
+
+    var _loadTribalData = function(){
+        var data = [];
+        for(var i = 0; i < historic_trend_json.series.length; i++){
+            var dataPoint = {};
+            dataPoint.x = new Date(historic_trend_json.series[i].releaseTimeStamp*1000);
+            dataPoint.y = historic_trend_json.series[i].score;
+            dataPoint.value = {};
+            dataPoint.value.y = dataPoint.y;
+            dataPoint.value.x = dataPoint.x;
+            //dataPoint.value = historic_trend_json.series[i].score;
+            dataPoint.meta = historic_trend_json.series[i].setName;
+            data.push(dataPoint);
+        }
+        return data;
+
+    }
+
+    var _loadTribalTicks = function(){
+        var data = [];
+        var min = 1994;
+        var max = 2019;
+        for(var i = min; i <= max; i++){
+            var dataPoint = new Date(i + "-01-01 00:00:00")
+            data.push(dataPoint);
+        }
+        return data;
+
+    }
+
+    var trend_chart = new Chartist.Line('#tribal-trend-chart', {
+        series: [
+            {
+                data: _loadTribalData()
+            }
+        ]
+    },
+
+        {
+        plugins: [
+            Chartist.plugins.ctAxisTitle({
+                axisX: {
+                    axisTitle: "Release Year",
+                    axisClass: "ct-axis-title",
+                    offset: {
+                        x: 0,
+                        y: 40
+                    },
+                    flipTitle: false
+                },
+                axisY: {
+                    axisTitle: "Tribal Score",
+                    axisClass: "ct-axis-title",
+                    offset: {
+                        x: 0,
+                        y: 40
+                    },
+                    flipTitle: true
+                }
+            }),
+            Chartist.plugins.tooltip({
+                transformTooltipTextFnc : percentify
+            })
+        ],
+        high: 105,
+        axisX: {
+            type: Chartist.FixedScaleAxis,
+            ticks: _loadTribalTicks(),
+            labelInterpolationFnc: function(value) {
+                return moment(value).format('YYYY');
+            }
+        },
+            chartPadding: {
+                bottom: 100
+            },
+        axisY: {
+            type: Chartist.FixedScaleAxis,
+            offset: 80,
+            ticks: [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
+            labelInterpolationFnc: function(value) {
+                return value + '%'
+            }
+        }
+    });
+
+    trend_chart.on('draw', function(data) {
+        // If the draw event was triggered from drawing a point on the line chart
+        if(data.type === 'point') {
+            data.element.attr({
+                //style: 'stroke-width: 50px'
+
+                style: 'stroke: #3b987b;'
+            });
+
+        }
+        if(data.type === 'line') {
+            data.element.attr({
+                //style: 'stroke-width: 50px'
+
+                style: 'stroke: #3b987b;stroke-width:2px;'
+            });
+        }
+    });
+
+</script>
+<script type="text/javascript">
+
+    historic_trend_json = %HISTORIC_CUMULATIVE_CHART_JSON%;
+
+    var _loadTribalData2 = function(){
+        var data = [];
+        for(var i = 0; i < historic_trend_json.series.length; i++){
+            var dataPoint = {};
+            dataPoint.x = new Date(historic_trend_json.series[i].releaseTimeStamp*1000);
+            dataPoint.y = historic_trend_json.series[i].score;
+            data.push(dataPoint);
+        }
+        return data;
+
+    }
+
+
+    new Chartist.Line('#tribal-cumulative-chart', {
+            series: [
+                {
+                    data: _loadTribalData2()
+                }
+            ]
+        },
+    {
+        showArea: true,
+        showLine: false,
+        showPoint: false,
+        axisX: {
+            showGrid: false,
+            type: Chartist.FixedScaleAxis,
+                ticks: _loadTribalTicks(),
+                labelInterpolationFnc: function(value) {return ""}
+        },
+        chartPadding: {
+            bottom: 100
+        },
+        plugins: [
+            Chartist.plugins.ctAxisTitle({
+                axisX: {
+
+                },
+                axisY: {
+                    axisTitle: "Unique Tribes",
+                    axisClass: "ct-axis-title",
+                    offset: {
+                        x: 0,
+                        y: -1160
+                    },
+                    flipTitle: false
+                }
+            })
+        ],
+        axisY: {
+                axisTitle: 'Unique Tribes',
+                offset: 80,
+                showGrid: false,
+                position: "right",
+                onlyInteger:true
+            }
+        }).on('draw', function(data) {
+
+            if(data.type === 'label' && data.axis === 'y') {
+
+                // We just offset the label X position to be in the middle between the current and next axis grid
+                data.element.attr({
+                    //style: 'stroke-width: 50px'
+
+                    style: 'padding-left:25px'
+                });
+            }
+
+            if(data.type === 'area') {
+                data.element.attr({
+                    //style: 'stroke-width: 50px'
+
+                    style: 'fill: #3b5998;fill-opacity:0.26'
+                });
+            }
+        }
+    );
+
+
+</script>
+<script type="text/javascript">
+
+    historic_trend_json = %HISTORIC_TREND_CHART_JSON%;
+
+    var _loadTribalData = function(){
+        var data = [];
+        for(var i = 0; i < historic_trend_json.series.length; i++){
+            var dataPoint = {};
+            dataPoint.x = new Date(historic_trend_json.series[i].releaseTimeStamp*1000);
+            dataPoint.y = historic_trend_json.series[i].score;
+            dataPoint.value = {};
+            dataPoint.value.y = 100;//dataPoint.y;
+            dataPoint.value.x = dataPoint.x;
+            //dataPoint.value = historic_trend_json.series[i].score;
+            dataPoint.meta = historic_trend_json.series[i].setName;
+            data.push(dataPoint);
+        }
+        return data;
+
+    }
+
+    var _loadTribalTicks = function(){
+        var data = [];
+        var min = 1994;
+        var max = 2019;
+        for(var i = min; i <= max; i++){
+            var dataPoint = new Date(i + "-01-01 00:00:00")
+            data.push(dataPoint);
+        }
+        return data;
+
+    }
+
+    var trend_chart = new Chartist.Bar('#tribal-trend-chart-tool-tips', {
+            series: [
+                {
+                    data: _loadTribalData()
+                }
+            ]
+        },
+
+        {
+            plugins: [
+                Chartist.plugins.tooltip({
+                    transformTooltipTextFnc : yearVal,
+                    anchorToPoint: false
+                })
+            ],
+            high: 105,
+            axisX: {
+                showGrid: false,
+                type: Chartist.FixedScaleAxis,
+                ticks: _loadTribalTicks(),
+                labelInterpolationFnc: function(value) {
+                    return "";
+                }
+            },
+            chartPadding: {
+                bottom: 100
+            },
+            axisY: {
+                showGrid: false,
+                type: Chartist.FixedScaleAxis,
+                offset: 80,
+                ticks: [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
+                labelInterpolationFnc: function(value) {
+                    return ""
+                }
+            }
+        });
+
+    trend_chart.on('draw', function(context) {
+
+            if(context.type === 'bar') {
+                var color = context.value.y;//Math.random() * 100;//context.value;
+                context.element.attr({
+                    //style: 'stroke-width: 50px'
+                    style: 'stroke: hsl(' + color + ', 80%, 0%);opacity:0'
+                });
+            }
+        });
+
+
+</script>
+</div>
+<div id="largest-tribes" style="position:relative;">
+    <h3>Largest Tribes</h3>
+    <p>These are the most supported tribes within their respective sets (including reference cards)</p>
+    <div class="top-section">
+        %MOST_SUPPORTED_TRIBE_HTML%
+    </div>
+</div>
+
+<div id="frequent-tribes" style="position:relative;">
+    <h3>Recurring Tribes</h3>
+    <p>These tribes have been supported most frequently over the years</p>
+    <div class="top-section">
+        %MOST_FREQUENT_TRIBE_HTML%
+    </div>
+</div>
+
+<div id="snubbed-tribes" style="position:relative;">
+    <h3>Most Snubbed</h3>
+    <p>These creature types have had the most printings but have not been featured in any set as a supported tribe</p>
+    <div class="top-section">
+        %MOST_SNUBBED_TRIBE_HTML%
+    </div>
+</div>
+
+<div id="all-sets" style="position:relative;">
+    <h3>All Sets</h3>
+    <p>This is a raw output of all the tribes found in each set, in reverse chronological order. Provided for completeness</p>
+    <div class="top-section">
+        %ALL_SETS_HTML%
+    </div>
+</div>
+
+
+</body>
+</html>
